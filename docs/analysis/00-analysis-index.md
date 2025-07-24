@@ -199,16 +199,16 @@ Hệ thống tài liệu này được thiết kế để hỗ trợ việc **đ
 
 ```
 docs/analysis/
-├── README.md                                    # This file - system overview
-├── analysis-report.md                           # Executive analysis of n8n capabilities
-├── requirements-checklist.md                    # Systematic assessment framework
-├── ai-agent-guide.md                           # Complete consultation guide
-├── user-requirements-template.md                # Information gathering template
-├── deployment-options-matrix.md                # Detailed options comparison
-├── user-case-study-personal-automation.md       # Specific case study documentation
-├── technical-analysis-personal-automation.md    # Technical analysis and recommendations
-├── implementation-plan-personal-automation.md   # Detailed implementation roadmap
-└── additional-requirements-personal-automation.md # Additional requirements checklist
+├── 00-analysis-index.md                    # This file - system overview
+├── 01-project-analysis-report.md           # Executive analysis of n8n capabilities
+├── 02-requirements-assessment-framework.md # Systematic assessment framework
+├── 03-ai-agent-consultation-guide.md       # Complete consultation guide
+├── 04-user-requirements-template.md        # Information gathering template
+├── 05-deployment-options-comparison.md     # Detailed options comparison
+├── 06-case-study-personal-automation.md    # Specific case study documentation
+├── 07-technical-analysis-hardware.md       # Technical analysis and recommendations
+├── 08-implementation-roadmap.md            # Detailed implementation roadmap
+└── 09-additional-requirements-checklist.md # Additional requirements checklist
 ```
 
 ---
