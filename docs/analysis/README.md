@@ -173,6 +173,12 @@ Hệ thống tài liệu này được thiết kế để hỗ trợ việc **đ
 2. **Risk Assessment:** Identify potential challenges early
 3. **Resource Planning:** Estimate realistic timeline và budget
 
+### **For Specific Case Studies:**
+1. **Case Analysis:** [user-case-study-personal-automation.md](./user-case-study-personal-automation.md) - Personal automation example
+2. **Technical Deep Dive:** [technical-analysis-personal-automation.md](./technical-analysis-personal-automation.md) - Hardware analysis và optimization
+3. **Implementation Guide:** [implementation-plan-personal-automation.md](./implementation-plan-personal-automation.md) - Step-by-step roadmap
+4. **Additional Details:** [additional-requirements-personal-automation.md](./additional-requirements-personal-automation.md) - Supplementary questionnaire
+
 ---
 
 ## 📞 Support và Next Steps
@@ -193,12 +199,16 @@ Hệ thống tài liệu này được thiết kế để hỗ trợ việc **đ
 
 ```
 docs/analysis/
-├── README.md                          # This file - system overview
-├── analysis-report.md                 # Executive analysis of n8n capabilities
-├── requirements-checklist.md          # Systematic assessment framework
-├── ai-agent-guide.md                 # Complete consultation guide
-├── user-requirements-template.md      # Information gathering template
-└── deployment-options-matrix.md      # Detailed options comparison
+├── README.md                                    # This file - system overview
+├── analysis-report.md                           # Executive analysis of n8n capabilities
+├── requirements-checklist.md                    # Systematic assessment framework
+├── ai-agent-guide.md                           # Complete consultation guide
+├── user-requirements-template.md                # Information gathering template
+├── deployment-options-matrix.md                # Detailed options comparison
+├── user-case-study-personal-automation.md       # Specific case study documentation
+├── technical-analysis-personal-automation.md    # Technical analysis and recommendations
+├── implementation-plan-personal-automation.md   # Detailed implementation roadmap
+└── additional-requirements-personal-automation.md # Additional requirements checklist
 ```
 
 ---
