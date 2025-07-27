@@ -1,3 +1,9 @@
+---
+description: "USE WHEN developing workflows, creating templates, or structuring n8n automation projects with Product Designer focus"
+globs: ["docs/workflow-development/**/*", "**/*.json", "**/workflow*/**/*", "**/template*/**/*"]
+alwaysApply: true
+---
+
 # Workflow Development Framework Rules cho Product Designer
 
 ## Framework Structure

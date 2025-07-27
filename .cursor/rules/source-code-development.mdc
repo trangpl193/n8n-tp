@@ -1,3 +1,9 @@
+---
+description: "USE WHEN setting up development environment, configuring n8n source code, or implementing custom nodes and integrations"
+globs: ["**/*.ts", "**/*.js", "packages/**/*", "src/**/*", "**/setup*/**/*", "**/config*/**/*"]
+alwaysApply: true
+---
+
 # Source Code Development Rules cho Product Designer
 
 ## Development Approach - Flexibility First

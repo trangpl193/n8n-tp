@@ -1,3 +1,9 @@
+---
+description: "USE WHEN referencing system specifications, configuring resource allocation, or optimizing for STRANGE system hardware"
+globs: ["**/*"]
+alwaysApply: true
+---
+
 # Hardware Configuration Rules cho STRANGE System
 
 ## System Specifications - Current Setup

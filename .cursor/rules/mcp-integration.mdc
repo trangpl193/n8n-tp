@@ -1,0 +1,50 @@
+---
+description: "USE WHEN implementing Model Context Protocol services, designing MCP architecture, or integrating AI services for long-term automation"
+globs: ["**/mcp*/**/*", "**/*mcp*", "**/services/**/*", "**/ai*/**/*"]
+alwaysApply: false
+---
+
+# MCP Integration Rules cho Advanced AI Automation
+
+## MCP Service Architecture Principles
+- **Service Modularity**: Design standalone MCP services với clear interfaces
+- **Context Preservation**: Maintain conversation context across service calls
+- **Error Resilience**: Implement robust error handling và fallback mechanisms
+- **Performance Efficiency**: Optimize service calls để minimize latency
+
+## Implementation Guidelines
+- **Service Discovery**: Use standardized naming conventions cho MCP services
+- **Protocol Compliance**: Follow MCP specification exactly
+- **Security First**: Implement authentication và authorization
+- **Monitoring**: Add comprehensive logging và metrics
+
+## Design Research Service Pattern
+```typescript
+export class DesignResearchService implements MCPService {
+  async analyzeTrends(query: string): Promise<TrendAnalysis>
+  async competitorAnalysis(domain: string): Promise<CompetitorReport>
+  async generateInsights(data: any[]): Promise<ActionableInsights>
+}
+```
+
+## Creative Automation Service Pattern
+```typescript
+export class CreativeAutomationService implements MCPService {
+  async generateAssets(brief: ProjectBrief): Promise<AssetCollection>
+  async validateDesign(design: DesignFile): Promise<ValidationReport>
+  async optimizeWorkflow(workflow: WorkflowConfig): Promise<OptimizedWorkflow>
+}
+```
+
+## Best Practices
+- **Stateless Design**: Keep services stateless cho better scalability
+- **Type Safety**: Use TypeScript interfaces cho all service contracts
+- **Documentation**: Maintain comprehensive API documentation
+- **Testing**: Implement unit tests cho each service method
+- **Versioning**: Use semantic versioning cho service updates
+
+## Integration với n8n Workflows
+- **Service Nodes**: Create custom n8n nodes cho MCP services
+- **Error Handling**: Implement retry logic trong workflow nodes
+- **Performance**: Monitor service call latency trong n8n interface
+- **Fallback**: Provide alternative paths khi services unavailable

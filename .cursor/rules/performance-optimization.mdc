@@ -1,3 +1,9 @@
+---
+description: "USE WHEN optimizing performance, analyzing system resources, or implementing efficiency improvements on STRANGE system"
+globs: ["**/*.ts", "**/*.js", "packages/**/*", "scripts/**/*", "**/performance*/**/*"]
+alwaysApply: true
+---
+
 # Performance-First Development Rules với 80/20 Approach
 
 ## Core Performance Principles cho Product Designer

@@ -1,3 +1,9 @@
+---
+description: "USE WHEN writing documentation, creating content, or formatting text with Vietnamese language support and technical clarity"
+globs: ["**/*.md", "docs/**/*", "**/*.txt", "**/README*", "**/CHANGELOG*"]
+alwaysApply: true
+---
+
 # Concise Formatting Rules cho Product Designer
 
 ## Content Structure - 80/20 Principle
