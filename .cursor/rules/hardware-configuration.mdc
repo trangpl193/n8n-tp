@@ -1,0 +1,64 @@
+# Hardware Configuration Rules cho STRANGE System
+
+## System Specifications - Current Setup
+- **Hostname**: STRANGE
+- **OS**: Windows 11 Pro (Build 22000)
+- **CPU**: Intel Core i9-9900K (8 cores, 16 threads) - High performance cho parallel processing
+- **RAM**: 32GB DDR4 (2x16GB) - Sufficient cho large datasets và multiple applications
+- **Storage**:
+  - SSD NVMe 1TB (E:) - Primary storage cho n8n data
+  - SSD 240GB (F:) - Secondary storage cho temporary files
+  - HDD 2TB (D:), HDD 1TB (I:) - Backup storage
+- **Network**: Wi-Fi 6, IP: 192.168.1.20 - Stable connection cho API calls
+- **Runtime**: Node.js v22.14.0, Docker v27.5.1 - Latest stable versions
+
+## Resource Allocation Guidelines - Practical Balance
+- **CPU Usage**: Max 6 cores cho n8n workflows (2 cores reserved cho OS và other applications)
+- **RAM Allocation**: 4-8GB cho n8n workflows (24GB+ available cho multitasking)
+- **Primary Storage**: E:/n8n-data/ cho all n8n data (SSD NVMe performance)
+- **Network Bandwidth**: Wi-Fi 6 bandwidth sufficient cho multiple concurrent API calls
+
+## Performance Capacities - Realistic Expectations
+- **Simple workflows**: 50-100 concurrent executions (basic data processing)
+- **Medium complexity**: 20-50 concurrent (API integrations, data transformation)
+- **Complex workflows**: 10-20 concurrent (AI/ML processing, heavy computations)
+- **Resource-intensive tasks**: 5-10 concurrent (large file processing, complex algorithms)
+
+## Storage Strategy - Optimized cho Performance và Organization
+- **Primary Data**: E: drive (SSD NVMe) cho database, active workflows, và cache
+- **Temporary Files**: F: drive (SSD) cho temporary processing files
+- **Backups**: D: hoặc I: drive (HDD) cho regular backups và archives
+- **System Files**: C: drive cho OS, applications, và development tools
+
+## Network Configuration - Production Ready
+- **Primary Webhook URL**: http://192.168.1.20:5678
+- **Alternative Port**: 5679 (backup port cho testing)
+- **Wi-Fi 6 Performance**: Up to 2.4 Gbps (more than sufficient cho API workflows)
+- **Network Stability**: DHCP assigned IP với stable router connection (192.168.1.1)
+
+## Practical Usage Guidelines cho Product Designer
+- **Development Environment**: Sử dụng localhost cho development, IP address cho testing
+- **Resource Monitoring**: Monitor CPU và RAM usage để avoid overloading system
+- **Storage Management**: Regular cleanup của temporary files và old workflow data
+- **Network Reliability**: Ensure stable internet connection cho external API calls
+- **Backup Strategy**: Regular backups sang HDD drives cho data protection
+
+## Performance Optimization Tips
+- **Database Location**: Keep n8n database trên E: drive cho fast access
+- **Temp Files**: Configure temporary files trên F: drive để separate từ main data
+- **Memory Management**: Monitor memory usage của complex workflows
+- **CPU Distribution**: Balance workload across available cores efficiently
+- **Network Optimization**: Use connection pooling cho frequent API calls
+
+## System Limitations - Be Aware
+- **Wi-Fi Dependency**: System relies trên Wi-Fi connection (no ethernet backup)
+- **Storage Limits**: NVMe drive có limited space (1TB) cho primary data
+- **Memory Constraints**: 32GB sufficient nhưng large datasets có thể need optimization
+- **CPU Thermal**: i9-9900K có thể thermal throttle trong sustained heavy loads
+- **Power Management**: Desktop system needs stable power connection
+
+## MCP Service Considerations
+- **Resource Allocation**: MCP services share system resources với n8n workflows
+- **Service Distribution**: Distribute MCP services across available CPU cores
+- **Memory Sharing**: Efficient memory usage between MCP services và workflows
+- **Network Resources**: MCP services có thể compete cho network bandwidth

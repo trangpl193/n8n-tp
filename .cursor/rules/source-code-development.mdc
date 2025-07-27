@@ -1,0 +1,76 @@
+# Source Code Development Rules cho Product Designer
+
+## Development Approach - Flexibility First
+- **Prefer Source Code**: Luôn sử dụng n8n source code thay vì Docker containers (maximum control)
+- **Local Development**: Clone từ GitHub và run locally cho maximum customization capability
+- **Design-Oriented Customization**: Enable full customization của n8n core functionality cho design needs
+- **Real-time Debugging**: Direct access to source code cho debugging và optimization trong development
+
+## Setup Commands - Simplified cho Product Designer
+```bash
+# Clone n8n source code
+git clone https://github.com/n8n-io/n8n.git
+cd n8n
+
+# Install dependencies
+npm install
+
+# Build project (one-time setup)
+npm run build
+
+# Development mode (recommended cho daily work)
+npm run dev
+
+# Production mode (khi cần test production-like)
+npm start
+```
+
+## Environment Configuration - User-Friendly
+- **Environment file**: Sử dụng `.env` file cho environment variables (dễ manage)
+- **Database path**: Configure database path to E:/n8n-data/ (SSD performance)
+- **Webhook URL**: Set webhook URL to http://192.168.1.20:5678 (STRANGE system IP)
+- **Development settings**: Enable development mode cho faster iteration
+- **Security**: Enable encryption cho production, optional cho development
+
+## Customization Areas cho Product Designer
+- **Node development**: Create custom nodes cho specific design workflow needs
+- **Core workflow optimization**: Modify workflow engine để improve usability
+- **Database customization**: Adjust database schema cho better data organization
+- **API modifications**: Customize API endpoints cho design tool integrations
+- **UI/UX enhancements**: Modify interface để better suit design workflow
+
+## Benefits Over Docker cho Design Work
+- **Full source access**: Complete access to all source code cho customization
+- **Real-time debugging**: Instant debugging capabilities trong development
+- **Custom node development**: Easy development của custom nodes
+- **Performance optimization**: Direct performance tuning capabilities
+- **Dependency management**: Full control over dependencies và versions
+- **Design tool integration**: Easier integration với design tools và services
+
+## MCP Integration Strategy
+- **Custom MCP services**: Develop MCP services để extend n8n functionality
+- **Design workflow automation**: Create MCP services cho common design tasks
+- **Tool chain integration**: Use MCP để integrate với existing design tools
+- **Reusable components**: Build MCP services có thể reuse across projects
+- **Long-term automation**: Focus vào MCP solutions scale với workflow complexity
+
+## Development Best Practices cho Product Designer
+- **Incremental changes**: Make small, incremental changes để avoid breaking workflow
+- **Version control**: Use git branches cho different experiments
+- **Documentation**: Document customizations bằng tiếng Việt cho future reference
+- **Testing approach**: Test changes trong development environment trước khi apply
+- **Backup strategy**: Keep backups của working configurations
+
+## Quick Development Workflow
+1. **Start development server**: `npm run dev` cho hot reloading
+2. **Make changes**: Modify source code theo needs
+3. **Test immediately**: Changes appear immediately trong development mode
+4. **Document changes**: Note modifications trong project documentation
+5. **Commit progress**: Regular commits để track progress
+
+## Integration với Existing Tools
+- **Design software**: Setup integrations với Adobe Creative Suite, Figma, etc.
+- **Project management**: Connect với project management tools
+- **Communication tools**: Integrate với Slack, Discord, etc.
+- **File storage**: Setup connections với cloud storage services
+- **Version control**: Integrate với Git workflow cho design assets

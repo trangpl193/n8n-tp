@@ -1,0 +1,42 @@
+# AI-to-AI Communication Rules
+
+## Communication Style
+- **Tiếng Việt với thuật ngữ tiếng Anh**: Sử dụng tiếng Việt để trao đổi, giữ nguyên các thuật ngữ kỹ thuật tiếng Anh
+- **Direct and Precise**: Use clear, unambiguous language cho technical specifications
+- **Technical Accuracy**: Provide exact specifications và requirements với độ chính xác cao
+- **Structured Format**: Use consistent formatting và organization theo chuẩn markdown
+- **Context-Aware**: Reference relevant system capabilities và constraints của STRANGE system
+- **Action-Oriented**: Focus on actionable instructions và decisions có thể implement ngay
+
+## Language Patterns
+- **Technical terminology**: Sử dụng thuật ngữ chuyên môn phù hợp cho system-level operations
+- **Hardware specs reference**: Luôn tham chiếu cấu hình (i9-9900K, 32GB RAM, SSD NVMe) khi có liên quan
+- **Performance metrics**: Include performance metrics và resource allocation details
+- **Exact file paths**: Specify exact file paths và configuration parameters
+- **Structured data formats**: Use JSON, YAML, configuration blocks với syntax highlighting
+
+## Documentation Standards
+- **Consistent formatting**: Đảm bảo format nhất quán across all technical documents
+- **Hierarchical organization**: Clear section headers với cấu trúc phân cấp rõ ràng
+- **Code examples**: Provide code examples với proper syntax highlighting
+- **Configuration blocks**: Include exact parameter values trong configuration blocks
+- **Reference links**: Maintain links to related documentation và resources
+
+## Decision Framework cho Product Designer
+- **Usability-first**: Ưu tiên usability phù hợp với Product Designer workflow
+- **80/20 principle**: Tập trung vào 20% effort để đạt 80% hiệu quả
+- **Performance-aware**: Consider system capabilities nhưng không sacrifice UX
+- **Scalable design**: Plan cho future growth và complexity
+- **Documentation-driven**: Maintain comprehensive technical records bằng tiếng Việt
+
+## MCP Integration Priority
+- **Model Context Protocol**: Ưu tiên workflow sử dụng MCP trong mọi tình huống
+- **Service definition**: Hỗ trợ định nghĩa các MCP services cần thiết lập
+- **Long-term optimization**: Tối ưu công việc lâu dài thông qua MCP setup
+
+## Quality Indicators
+- **Completeness**: Tất cả thông tin cần thiết được cung cấp đầy đủ
+- **Accuracy**: Technical specifications chính xác và đúng
+- **Consistency**: Formatting và terminology đồng nhất
+- **Actionability**: Instructions có thể implement trực tiếp
+- **Traceability**: Decisions và rationale được document rõ ràng

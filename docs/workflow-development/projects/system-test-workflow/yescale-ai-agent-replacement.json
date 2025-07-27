@@ -1,0 +1,188 @@
+{
+	"name": "AI Agent with Yescale API",
+	"nodes": [
+		{
+			"id": "chat-trigger-1",
+			"name": "Chat Trigger",
+			"type": "@n8n/n8n-nodes-langchain.chatTrigger",
+			"position": [400, 200],
+			"parameters": {
+				"public": true,
+				"options": {
+					"title": "AI Agent với Yescale API 🚀",
+					"subtitle": "Powered by Yescale Multi-Provider AI",
+					"responseMode": "lastNode",
+					"inputPlaceholder": "Nhập tin nhắn của bạn...",
+					"showWelcomeScreen": false
+				},
+				"initialMessages": "Xin chào! Tôi là AI Agent được hỗ trợ bởi Yescale API 👋"
+			},
+			"typeVersion": 1.1
+		},
+		{
+			"id": "ai-agent-1",
+			"name": "AI Agent Controller",
+			"type": "@n8n/n8n-nodes-langchain.agent",
+			"position": [800, 200],
+			"parameters": {
+				"options": {
+					"systemMessage": "Bạn là AI Agent thông minh được hỗ trợ bởi Yescale API. Bạn có thể:\n1. Trả lời câu hỏi thông minh\n2. Lấy thông tin thời tiết\n3. Đọc tin tức mới nhất\n4. Hỗ trợ các tác vụ automation\n\nHãy trả lời một cách thân thiện và hữu ích. Sử dụng các tool khi cần thiết."
+				}
+			},
+			"typeVersion": 2.2
+		},
+		{
+			"id": "yescale-langchain-1",
+			"name": "Yescale LangChain Bridge",
+			"type": "n8n-nodes-base.code",
+			"position": [400, 400],
+			"parameters": {
+				"mode": "runOnceForAllItems",
+				"jsCode": "// Yescale LangChain Bridge\n// Implements LangChain compatible interface for Yescale API\n\nclass YescaleLangChainBridge {\n  constructor(apiKey, baseUrl = 'https://api.yescale.io', provider = 'openai') {\n    this.apiKey = apiKey;\n    this.baseUrl = baseUrl;\n    this.provider = provider;\n    this.model = 'o3'; // Default model\n    this.temperature = 0.7;\n    this.maxTokens = 1000;\n  }\n\n  // LangChain compatible call method\n  async call(messages, options = {}) {\n    try {\n      const payload = {\n        model: options.model || this.model,\n        messages: this.formatMessages(messages),\n        temperature: options.temperature ?? this.temperature,\n        max_tokens: options.max_tokens || this.maxTokens\n      };\n\n      const response = await this.makeRequest(payload);\n      return this.formatResponse(response);\n    } catch (error) {\n      throw new Error(`Yescale API Error: ${error.message}`);\n    }\n  }\n\n  formatMessages(messages) {\n    if (typeof messages === 'string') {\n      return [{ role: 'user', content: messages }];\n    }\n    if (Array.isArray(messages)) {\n      return messages.map(msg => ({\n        role: msg.role || 'user',\n        content: msg.content || msg.text || msg\n      }));\n    }\n    return [{ role: 'user', content: String(messages) }];\n  }\n\n  async makeRequest(payload) {\n    const response = await fetch(`${this.baseUrl}/v1/chat/completions`, {\n      method: 'POST',\n      headers: {\n        'Content-Type': 'application/json',\n        'Authorization': `Bearer ${this.apiKey}`,\n        'X-Provider': this.provider\n      },\n      body: JSON.stringify(payload)\n    });\n\n    if (!response.ok) {\n      throw new Error(`HTTP ${response.status}: ${response.statusText}`);\n    }\n\n    return await response.json();\n  }\n\n  formatResponse(response) {\n    if (response.choices && response.choices.length > 0) {\n      return {\n        content: response.choices[0].message.content,\n        usage: response.usage,\n        model: response.model,\n        finish_reason: response.choices[0].finish_reason\n      };\n    }\n    throw new Error('Invalid response format from Yescale API');\n  }\n\n  // LangChain compatibility methods\n  get _llmType() {\n    return 'yescale';\n  }\n\n  serialize() {\n    return {\n      _type: 'yescale',\n      provider: this.provider,\n      model: this.model,\n      temperature: this.temperature\n    };\n  }\n}\n\n// Main execution\nconst items = $input.all();\nconst results = [];\n\nfor (const item of items) {\n  try {\n    // Get configuration from environment or node parameters\n    const apiKey = $env.YESCALE_API_KEY || 'sk-your-api-key-here';\n    const provider = $env.YESCALE_PROVIDER || 'openai';\n    const model = $env.YESCALE_MODEL || 'o3';\n    \n    // Initialize Yescale bridge\n    const yescale = new YescaleLangChainBridge(apiKey, 'https://api.yescale.io', provider);\n    yescale.model = model;\n    yescale.temperature = item.json.temperature || 0.7;\n    yescale.maxTokens = item.json.max_tokens || 1000;\n\n    // Create LangChain compatible response\n    const langchainCompatible = {\n      yescaleBridge: yescale,\n      callMethod: yescale.call.bind(yescale),\n      _type: 'yescale_langchain_bridge',\n      provider: provider,\n      model: model,\n      ready: true\n    };\n\n    results.push({\n      json: langchainCompatible,\n      pairedItem: { item: item.pairedItem }\n    });\n  } catch (error) {\n    results.push({\n      json: { \n        error: error.message,\n        ready: false \n      },\n      pairedItem: { item: item.pairedItem }\n    });\n  }\n}\n\nreturn results;"
+			},
+			"typeVersion": 2
+		},
+		{
+			"id": "memory-1",
+			"name": "Conversation Memory",
+			"type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+			"position": [800, 400],
+			"parameters": {
+				"contextWindowLength": 30
+			},
+			"typeVersion": 1.3
+		},
+		{
+			"id": "weather-tool",
+			"name": "Weather Tool",
+			"type": "n8n-nodes-base.httpRequestTool",
+			"position": [1200, 300],
+			"parameters": {
+				"url": "https://api.open-meteo.com/v1/forecast",
+				"options": {},
+				"sendQuery": true,
+				"queryParameters": {
+					"parameters": [
+						{
+							"name": "latitude",
+							"value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Latitude của địa điểm, ví dụ: 21.0285 cho Hà Nội. Tự động suy luận từ tên thành phố.`, 'string') }}"
+						},
+						{
+							"name": "longitude",
+							"value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Longitude của địa điểm, ví dụ: 105.8542 cho Hà Nội. Tự động suy luận từ tên thành phố.`, 'string') }}"
+						},
+						{
+							"name": "current",
+							"value": "temperature_2m,windspeed_10m,rain,weathercode"
+						},
+						{
+							"name": "daily",
+							"value": "temperature_2m_max,temperature_2m_min,precipitation_sum"
+						}
+					]
+				},
+				"toolDescription": "Lấy thông tin thời tiết hiện tại và dự báo cho bất kỳ địa điểm nào. Chỉ cần tên thành phố/địa điểm."
+			},
+			"typeVersion": 4.2
+		},
+		{
+			"id": "news-tool",
+			"name": "News Tool",
+			"type": "n8n-nodes-base.rssFeedReadTool",
+			"position": [1200, 400],
+			"parameters": {
+				"url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', `Chọn một trong các nguồn tin:\n- https://vnexpress.net/rss/tin-moi-nhat.rss (VnExpress - tin tức Việt Nam)\n- https://feeds.bbci.co.uk/news/world/rss.xml (BBC World - tin thế giới)\n- https://techcrunch.com/feed/ (TechCrunch - công nghệ)\n- https://n8n.io/blog/rss (n8n Blog - automation)`, 'string') }}",
+				"options": {},
+				"toolDescription": "Đọc tin tức mới nhất từ các nguồn RSS. Có thể lấy tin Việt Nam, thế giới, công nghệ."
+			},
+			"typeVersion": 1.2
+		},
+		{
+			"id": "yescale-custom-tool",
+			"name": "Yescale Custom Tool",
+			"type": "n8n-nodes-base.code",
+			"position": [1200, 500],
+			"parameters": {
+				"mode": "runOnceForAllItems",
+				"jsCode": "// Custom Yescale Tool for specific tasks\nconst items = $input.all();\nconst results = [];\n\nfor (const item of items) {\n  const userQuery = item.json.query || item.json.input || 'Xin chào';\n  \n  try {\n    // Yescale API Configuration\n    const apiKey = $env.YESCALE_API_KEY || 'sk-your-api-key-here';\n    const provider = $env.YESCALE_PROVIDER || 'openai';\n    const model = $env.YESCALE_MODEL || 'o3';\n    \n    // Make direct API call to Yescale\n    const response = await fetch('https://api.yescale.io/v1/chat/completions', {\n      method: 'POST',\n      headers: {\n        'Content-Type': 'application/json',\n        'Authorization': `Bearer ${apiKey}`,\n        'X-Provider': provider\n      },\n      body: JSON.stringify({\n        model: model,\n        messages: [\n          {\n            role: 'system',\n            content: 'Bạn là AI assistant hữu ích, trả lời ngắn gọn và chính xác.'\n          },\n          {\n            role: 'user', \n            content: userQuery\n          }\n        ],\n        temperature: 0.7,\n        max_tokens: 500\n      })\n    });\n    \n    if (!response.ok) {\n      throw new Error(`API Error: ${response.status} ${response.statusText}`);\n    }\n    \n    const data = await response.json();\n    \n    results.push({\n      json: {\n        response: data.choices[0].message.content,\n        model: data.model,\n        provider: provider,\n        usage: data.usage,\n        success: true\n      },\n      pairedItem: { item: item.pairedItem }\n    });\n  } catch (error) {\n    results.push({\n      json: {\n        error: error.message,\n        success: false\n      },\n      pairedItem: { item: item.pairedItem }\n    });\n  }\n}\n\nreturn results;",
+				"toolDescription": "Công cụ tùy chỉnh sử dụng Yescale API để xử lý các yêu cầu đặc biệt."
+			},
+			"typeVersion": 2
+		}
+	],
+	"connections": {
+		"Chat Trigger": {
+			"main": [
+				[
+					{
+						"node": "AI Agent Controller",
+						"type": "main",
+						"index": 0
+					}
+				]
+			]
+		},
+		"Yescale LangChain Bridge": {
+			"ai_languageModel": [
+				[
+					{
+						"node": "AI Agent Controller",
+						"type": "ai_languageModel",
+						"index": 0
+					}
+				]
+			]
+		},
+		"Conversation Memory": {
+			"ai_memory": [
+				[
+					{
+						"node": "AI Agent Controller",
+						"type": "ai_memory",
+						"index": 0
+					}
+				]
+			]
+		},
+		"Weather Tool": {
+			"ai_tool": [
+				[
+					{
+						"node": "AI Agent Controller",
+						"type": "ai_tool",
+						"index": 0
+					}
+				]
+			]
+		},
+		"News Tool": {
+			"ai_tool": [
+				[
+					{
+						"node": "AI Agent Controller",
+						"type": "ai_tool",
+						"index": 0
+					}
+				]
+			]
+		},
+		"Yescale Custom Tool": {
+			"ai_tool": [
+				[
+					{
+						"node": "AI Agent Controller",
+						"type": "ai_tool",
+						"index": 0
+					}
+				]
+			]
+		}
+	},
+	"pinData": {},
+	"settings": {},
+	"staticData": null,
+	"tags": [],
+	"triggerCount": 1,
+	"updatedAt": "2025-01-25T00:00:00.000Z",
+	"versionId": "1"
+}

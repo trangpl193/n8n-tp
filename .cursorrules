@@ -1,0 +1,58 @@
+# n8n Workflow Development - Cursor Rules cho Product Designer
+
+## Ngôn ngữ và Communication
+- Sử dụng tiếng Việt để trao đổi, giữ nguyên các thuật ngữ kỹ thuật tiếng Anh
+- Ưu tiên usability phù hợp với Product Designer workflow
+- Luôn áp dụng nguyên tắc 80/20 để tập trung vào hiệu suất công việc
+
+## MCP Integration Priority
+- Ưu tiên workflow sử dụng Model Context Protocol trong mọi tình huống
+- Hỗ trợ định nghĩa các MCP services cần thiết lập để tối ưu công việc lâu dài
+- Focus vào solutions có thể scale theo thời gian
+
+## Hardware Configuration (STRANGE System)
+- CPU: Intel i9-9900K (8 cores/16 threads) - Max 6 cores cho n8n
+- RAM: 32GB DDR4 - Allocate 4-8GB cho workflows
+- Storage: SSD NVMe (E:) cho primary data, SSD (F:) cho temp files
+- Network: Wi-Fi 6, IP 192.168.1.20:5678
+
+## Development Approach
+- Prefer n8n source code over Docker containers cho maximum flexibility
+- Enable development mode cho faster iteration: `npm run dev`
+- Focus vào customization và integration với design tools
+- Maintain version control cho all customizations
+
+## Performance Guidelines
+- Smart optimization: Focus vào user-perceived performance
+- Batch processing: 100+ items khi necessary
+- Async operations cho I/O tasks
+- Monitor memory usage để prevent leaks
+- Progressive enhancement: start simple, optimize khi cần
+
+## Workflow Framework
+- Always use established templates cho requirement analysis
+- Focus vào usability impact trong implementation planning
+- Document everything bằng tiếng Việt
+- Include visual elements (diagrams, flowcharts) khi có thể
+- Build trong feedback loops với stakeholders
+
+## Code Quality
+- Incremental changes để avoid breaking workflow
+- Real-time debugging với development server
+- Document customizations cho future reference
+- Test trong development environment trước khi apply
+- Keep backups của working configurations
+
+## Content Standards
+- Maximum 500 lines per documentation file
+- Use hierarchical organization với clear section headers
+- Include practical examples và troubleshooting guides
+- Focus trên actionable information
+- Maintain cross-references giữa related concepts
+
+@file .cursor/rules/ai-communication.mdc
+@file .cursor/rules/workflow-framework.mdc
+@file .cursor/rules/performance-optimization.mdc
+@file .cursor/rules/source-code-development.mdc
+@file .cursor/rules/hardware-configuration.mdc
+@file .cursor/rules/concise-formatting.mdc

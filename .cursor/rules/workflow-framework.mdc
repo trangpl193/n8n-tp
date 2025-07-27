@@ -1,0 +1,48 @@
+# Workflow Development Framework Rules cho Product Designer
+
+## Framework Structure
+- **Template 1**: User Requirements Analysis (01-user-requirements-template.md)
+- **Template 2**: Workflow Implementation Plan (02-workflow-implementation-template.md)
+- **Hardware Reference**: System configuration (03-hardware-config-reference.md)
+- **Best Practices**: Design guidelines và patterns cho usability
+
+## Development Workflow - 80/20 Approach
+1. **User Input**: Natural language description của automation needs (tiếng Việt)
+2. **AI Analysis**: Sử dụng Template 1 để structure requirements với focus vào usability
+3. **Requirements Report**: Detailed analysis với technical specifications phù hợp Product Designer
+4. **Implementation Plan**: Sử dụng Template 2 để tạo deployment strategy đơn giản
+5. **User Verification**: Review và modify theo feedback
+6. **Final Documentation**: Approved implementation plan bằng tiếng Việt
+
+## Template Usage Rules cho Product Designer
+- **Always use Template 1** cho requirement analysis nhưng focus vào UX impact
+- **Always use Template 2** cho implementation planning với usability priority
+- **Reference hardware config** cho optimization decisions nhưng không over-engineer
+- **Follow 80/20 principle** từ guidelines để maximize efficiency
+- **Include usability considerations** trong all plans
+
+## Framework Components
+- **Usability-first design**: Optimize cho Product Designer workflow, không chỉ performance
+- **Source code approach**: Sử dụng n8n source code, không Docker (flexibility cho customization)
+- **Hardware-aware**: Leverage i9-9900K, 32GB RAM, SSD NVMe một cách smart
+- **Structured process**: Follow established templates nhưng adapt cho design needs
+- **Documentation-driven**: Maintain comprehensive documentation bằng tiếng Việt
+
+## MCP Integration cho Long-term Value
+- **MCP service definition**: Ưu tiên định nghĩa MCP services cho workflow automation
+- **Reusable components**: Tạo MCP services có thể reuse across projects
+- **Long-term optimization**: Focus vào solutions scale theo thời gian
+
+## Quality Standards với 80/20 Focus
+- **Completeness**: All templates phải được filled đầy đủ những phần core (20% effort, 80% value)
+- **Usability accuracy**: User experience specifications phải precise và testable
+- **Smart optimization**: Performance considerations trong decisions nhưng không over-optimize
+- **Maintainability**: Code và documentation standards phù hợp với design workflow
+- **Scalability**: Design cho future growth nhưng start simple
+
+## Design-Oriented Workflow Patterns
+- **User-centered approach**: Mọi workflow đều bắt đầu từ user needs
+- **Rapid prototyping**: Prefer quick iterations over perfect solutions
+- **Visual documentation**: Sử dụng diagrams và flowcharts khi có thể
+- **Feedback loops**: Build trong review cycles với stakeholders
+- **Accessibility considerations**: Ensure workflows accessible cho different user types

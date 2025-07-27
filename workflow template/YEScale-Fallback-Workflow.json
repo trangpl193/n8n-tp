@@ -1,0 +1,357 @@
+{
+  "name": "YEScale API Fallback Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "yescale-chat",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "b3f8c5a1-1234-4567-8901-000000000001",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ],
+      "webhookId": "yescale-chat-webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "// YEScale API Configuration\n// Get environment variables directly\nconst grokApiKey = $env.YESCALE_GROK_API_KEY;\nconst chatgptApiKey = $env.YESCALE_CHATGPT_API_KEY;\nconst claudeApiKey = $env.YESCALE_CLAUDE_API_KEY;\n\n// Validate API keys\nif (!grokApiKey && !chatgptApiKey && !claudeApiKey) {\n  throw new Error('At least one API key must be configured');\n}\n\nconst config = {\n  baseUrl: 'https://yescale.bogia.app',\n  groups: {\n    grok: {\n      apiKey: grokApiKey,\n      models: ['grok-3-beta', 'grok-4-0709']\n    },\n    chatgpt: {\n      apiKey: chatgptApiKey,\n      models: ['gpt-4o', 'gpt-4o-mini', 'gpt-3.5-turbo']\n    },\n    claude: {\n      apiKey: claudeApiKey,\n      models: ['claude-3-5-sonnet-20241022', 'claude-3-5-haiku-20241022']\n    }\n  }\n};\n\n// Get input from webhook\nconst input = $input.all()[0].json;\nconst userMessage = input.message || input.prompt || 'Hello';\nconst temperature = input.temperature || 0.7;\nconst maxTokens = input.max_tokens || 1000;\n\n// Create fallback sequence (only include groups with valid API keys)\nconst fallbackSequence = [];\nfor (const [groupName, groupConfig] of Object.entries(config.groups)) {\n  if (groupConfig.apiKey) {\n    for (const model of groupConfig.models) {\n      fallbackSequence.push({\n        group: groupName,\n        model: model,\n        apiKey: groupConfig.apiKey\n      });\n    }\n  }\n}\n\nif (fallbackSequence.length === 0) {\n  throw new Error('No valid API keys found for any model groups');\n}\n\n// Return configuration for next nodes\nreturn {\n  config: config,\n  userMessage: userMessage,\n  temperature: temperature,\n  maxTokens: maxTokens,\n  fallbackSequence: fallbackSequence,\n  currentAttempt: 0,\n  totalAttempts: fallbackSequence.length\n};"
+      },
+      "id": "b3f8c5a1-1234-4567-8901-000000000002",
+      "name": "Setup Configuration",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get current configuration\nconst data = $input.all()[0].json;\nconst currentAttempt = data.currentAttempt || 0;\nconst fallbackSequence = data.fallbackSequence;\n\nif (currentAttempt >= fallbackSequence.length) {\n  throw new Error('All models failed');\n}\n\nconst currentModel = fallbackSequence[currentAttempt];\n\n// Prepare request for YEScale API\nconst requestBody = {\n  model: currentModel.model,\n  messages: [\n    {\n      role: 'user',\n      content: data.userMessage\n    }\n  ],\n  temperature: data.temperature,\n  max_tokens: data.maxTokens,\n  stream: false\n};\n\nreturn {\n  ...data,\n  currentModel: currentModel,\n  requestBody: requestBody,\n  apiUrl: `${data.config.baseUrl}/v1/chat/completions`,\n  authHeader: `Bearer ${currentModel.apiKey}`\n};"
+      },
+      "id": "b3f8c5a1-1234-4567-8901-000000000003",
+      "name": "Prepare API Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        640,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{$json.apiUrl}}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "httpHeaderAuth": "yescaleAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{$json.authHeader}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyContentType": "json",
+        "jsonBody": "={{$json.requestBody}}",
+        "options": {
+          "timeout": 30000,
+          "retry": {
+            "enabled": false
+          }
+        }
+      },
+      "id": "b3f8c5a1-1234-4567-8901-000000000004",
+      "name": "Call YEScale API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        840,
+        300
+      ],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "success_condition",
+              "leftValue": "={{$json.error}}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "b3f8c5a1-1234-4567-8901-000000000005",
+      "name": "Check API Response",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Format successful response\nconst response = $input.all()[0].json;\nconst originalData = $('Prepare API Request').all()[0].json;\n\nreturn {\n  success: true,\n  model_used: originalData.currentModel.model,\n  group_used: originalData.currentModel.group,\n  attempt_number: originalData.currentAttempt + 1,\n  total_attempts: originalData.totalAttempts,\n  response: response.choices[0].message.content,\n  usage: response.usage,\n  timestamp: new Date().toISOString()\n};"
+      },
+      "id": "b3f8c5a1-1234-4567-8901-000000000006",
+      "name": "Format Success Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1240,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json}}"
+      },
+      "id": "b3f8c5a1-1234-4567-8901-000000000007",
+      "name": "Return Success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1440,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Handle API failure - prepare for next attempt\nconst errorData = $input.all()[0].json;\nconst originalData = $('Prepare API Request').all()[0].json;\n\nconst nextAttempt = originalData.currentAttempt + 1;\nconst fallbackSequence = originalData.fallbackSequence;\n\n// Log the failed attempt\nconsole.log(`Attempt ${originalData.currentAttempt + 1} failed:`, {\n  model: originalData.currentModel.model,\n  group: originalData.currentModel.group,\n  error: errorData.error?.message || 'Unknown error'\n});\n\n// Check if we have more models to try\nif (nextAttempt >= fallbackSequence.length) {\n  // All models failed\n  return {\n    success: false,\n    error: 'All models failed',\n    attempts_made: nextAttempt,\n    total_attempts: fallbackSequence.length,\n    last_error: errorData.error?.message || 'Unknown error',\n    timestamp: new Date().toISOString()\n  };\n}\n\n// Prepare for next attempt\nreturn {\n  ...originalData,\n  currentAttempt: nextAttempt,\n  lastError: errorData.error?.message || 'Unknown error'\n};"
+      },
+      "id": "b3f8c5a1-1234-4567-8901-000000000008",
+      "name": "Handle Failure",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1240,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "more_attempts_condition",
+              "leftValue": "={{$json.success}}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "equal"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "b3f8c5a1-1234-4567-8901-000000000009",
+      "name": "Check If More Attempts",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1440,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json}}"
+      },
+      "id": "b3f8c5a1-1234-4567-8901-000000000010",
+      "name": "Return Final Error",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1640,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Add delay before retry to avoid rate limiting\nconst data = $input.all()[0].json;\nconst delay = Math.min(1000 * Math.pow(2, data.currentAttempt), 5000); // Exponential backoff, max 5s\n\nconsole.log(`Waiting ${delay}ms before retry attempt ${data.currentAttempt + 1}`);\n\nreturn new Promise((resolve) => {\n  setTimeout(() => {\n    resolve(data);\n  }, delay);\n});"
+      },
+      "id": "b3f8c5a1-1234-4567-8901-000000000011",
+      "name": "Retry Delay",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1640,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Setup Configuration",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Setup Configuration": {
+      "main": [
+        [
+          {
+            "node": "Prepare API Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare API Request": {
+      "main": [
+        [
+          {
+            "node": "Call YEScale API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call YEScale API": {
+      "main": [
+        [
+          {
+            "node": "Check API Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Handle Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check API Response": {
+      "main": [
+        [
+          {
+            "node": "Format Success Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Handle Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Success Response": {
+      "main": [
+        [
+          {
+            "node": "Return Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Handle Failure": {
+      "main": [
+        [
+          {
+            "node": "Check If More Attempts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check If More Attempts": {
+      "main": [
+        [
+          {
+            "node": "Retry Delay",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Return Final Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retry Delay": {
+      "main": [
+        [
+          {
+            "node": "Prepare API Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2025-01-27T00:00:00.000Z",
+      "updatedAt": "2025-01-27T00:00:00.000Z",
+      "id": "yescale-api",
+      "name": "YEScale API"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2025-01-27T00:00:00.000Z",
+  "versionId": "1"
+}

@@ -1,0 +1,64 @@
+# Concise Formatting Rules cho Product Designer
+
+## Content Structure - 80/20 Principle
+- **Maximum efficiency**: 500 lines per rule file (focus vào essential information)
+- **Hierarchical organization**: Clear section headers với logical flow cho easy scanning
+- **Strategic bullet points**: Sử dụng bullet points cho lists và specifications (easier to digest)
+- **Code blocks**: Include code examples với proper syntax highlighting khi necessary
+- **Visual tables**: Sử dụng tables cho structured data comparison (designer-friendly)
+
+## Writing Guidelines - Clear Communication
+- **Eliminate redundancy**: Remove unnecessary repetition (respect reader's time)
+- **Active voice**: Direct và actionable language (faster comprehension)
+- **Specific details**: Include exact values và parameters khi relevant
+- **Logical flow**: Organize information theo logical sequence (problem → solution)
+- **Consistent terminology**: Sử dụng uniform naming conventions (avoid confusion)
+
+## Format Standards - Professional Presentation
+- **Markdown formatting**: Consistent markdown formatting cho all documentation
+- **Structured data**: JSON/YAML cho configuration data với proper indentation
+- **Inline comments**: Concise code comments cho implementation details
+- **Reference links**: Relevant links to related documentation và resources
+- **Version tracking**: Include version information cho tracking changes
+
+## Efficiency Principles cho Product Designer
+- **One concept per section**: Focus trên single topic (clear mental models)
+- **Immediate applicability**: Provide actionable information (can implement right away)
+- **Visual hierarchy**: Use headers, bold, italics để create visual structure
+- **Cross-references**: Link related concepts và files (efficient navigation)
+- **Standardized templates**: Consistent structure (predictable format)
+
+## Vietnamese Content Guidelines
+- **Primary language**: Tiếng Việt cho main communication
+- **Technical terms**: Giữ nguyên technical terminology tiếng Anh
+- **Clear explanations**: Explain complex concepts bằng tiếng Việt với examples
+- **Mixed usage**: Natural mixing của Vietnamese và English technical terms
+- **Accessibility**: Ensure content accessible cho Vietnamese-speaking designers
+
+## Quality Metrics - Measurable Standards
+- **Readability**: Clear và understandable content (scan-friendly)
+- **Completeness**: All necessary information included (no critical gaps)
+- **Accuracy**: Precise và correct technical details (reliable reference)
+- **Maintainability**: Easy to update và modify (sustainable documentation)
+- **Reusability**: Applicable across multiple contexts (efficient reuse)
+
+## Document Organization Patterns
+- **Quick reference**: Start với key information cho immediate needs
+- **Detailed sections**: Follow với comprehensive details cho deep dives
+- **Examples**: Include practical examples cho better understanding
+- **Troubleshooting**: Common issues và solutions (problem-solving focus)
+- **Resources**: Links to additional resources cho extended learning
+
+## Content Optimization Strategies
+- **Progressive disclosure**: Present information theo increasing detail levels
+- **Scannable format**: Use formatting để support quick scanning
+- **Action-oriented**: Focus trên what readers need to do
+- **Context-aware**: Provide appropriate context cho decision making
+- **Visual elements**: Use formatting elements để enhance comprehension
+
+## MCP Documentation Standards
+- **Service descriptions**: Clear descriptions của MCP services và their purposes
+- **Integration guides**: Step-by-step integration instructions
+- **Configuration examples**: Practical configuration examples với explanations
+- **Troubleshooting**: Common MCP issues và solutions
+- **Best practices**: Recommended patterns cho MCP usage

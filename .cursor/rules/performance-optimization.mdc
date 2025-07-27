@@ -1,0 +1,49 @@
+# Performance-First Development Rules với 80/20 Approach
+
+## Core Performance Principles cho Product Designer
+- **Smart CPU Optimization**: Leverage 8 cores/16 threads của i9-9900K cho parallel processing - nhưng không over-engineer
+- **Efficient Memory Management**: Sử dụng 32GB RAM efficiently cho large datasets - focus vào actual needs
+- **Storage Priority**: Sử dụng SSD NVMe (E: drive) cho database và temp files - simple setup
+- **Batch Processing**: Process data theo batches của 100+ items khi necessary
+- **Async Operations**: Sử dụng async/await cho I/O operations - standard practice
+- **Smart Caching**: Implement Redis caching cho expensive operations chỉ khi cần thiết
+
+## Resource Allocation - 80/20 Focused
+- **CPU allocation**: Allocate max 6 cores cho n8n processes (còn lại cho OS + multitasking)
+- **Memory management**: Reserve 4-8GB RAM cho n8n workflows (balance với other applications)
+- **Storage strategy**: Sử dụng E:/n8n-data/ cho all data storage (simple, effective)
+- **Performance monitoring**: Monitor memory usage với complex workflows (avoid memory leaks)
+
+## Anti-Patterns to Avoid - Critical 20%
+- ❌ **Blocking operations** trong main thread (ảnh hưởng user experience)
+- ❌ **Memory leaks** từ accumulated data (system stability)
+- ❌ **Processing items one-by-one** khi có thể batch (efficiency)
+- ❌ **Using HDD** cho database operations (performance impact)
+- ❌ **Ignoring error handling** trong async operations (reliability)
+- ❌ **Over-optimization** những phần không critical (waste time)
+
+## Performance Metrics to Track - Essential Only
+- **Processing time per batch**: Monitor để detect bottlenecks
+- **Memory usage patterns**: Track để prevent leaks
+- **Database connection time**: Ensure responsive user experience
+- **API response latency**: Critical cho user satisfaction
+- **Error rates**: Maintain system reliability
+
+## Smart Performance Strategies cho Product Designer
+- **Progressive enhancement**: Start simple, optimize chỉ khi cần
+- **User-perceived performance**: Ưu tiên những gì user actually notice
+- **Background processing**: Move heavy tasks away từ user interaction
+- **Caching strategies**: Cache kết quả của expensive operations
+- **Lazy loading**: Load resources chỉ khi actually needed
+
+## MCP Performance Considerations
+- **Service efficiency**: Design MCP services với performance trong mind
+- **Resource sharing**: Efficient resource usage across MCP services
+- **Background optimization**: Optimize MCP services in background không ảnh hưởng user workflow
+
+## Quick Wins - 20% Effort, 80% Impact
+1. **Database indexing**: Add indexes cho frequently queried fields
+2. **Connection pooling**: Reuse database connections
+3. **Response compression**: Compress API responses
+4. **Static asset caching**: Cache images và static files
+5. **Query optimization**: Review và optimize slow queries
