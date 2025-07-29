@@ -18,7 +18,7 @@
 
 **API Credentials (Phase 2):**
 - 🔄 **YEScale API Key:** ⭐ **PRIMARY CHOICE** - Get từ https://yescale.bogia.app (40-80% cost savings)
-- 🔄 **OpenAI API Key:** **FALLBACK** - Get từ https://platform.openai.com/api-keys  
+- 🔄 **OpenAI API Key:** **FALLBACK** - Get từ https://platform.openai.com/api-keys
 - 🔄 **Figma Access Token:** Get từ https://help.figma.com/hc/en-us/articles/8085703771159
 - 🔄 **Telegram Bot Token:** Create với @BotFather
 - 🔄 **Discord Application:** Create tại https://discord.com/developers/applications

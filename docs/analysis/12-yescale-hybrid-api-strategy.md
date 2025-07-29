@@ -1,8 +1,8 @@
 # YEScale Hybrid API Strategy - Cost Optimization Framework
 
-**Date Created:** 28/07/2025  
-**Integration Goal:** Minimize API costs với maximum functionality  
-**Approach:** Hybrid YEScale + Original Providers cho optimal cost-performance  
+**Date Created:** 28/07/2025
+**Integration Goal:** Minimize API costs với maximum functionality
+**Approach:** Hybrid YEScale + Original Providers cho optimal cost-performance
 
 ---
 
@@ -12,7 +12,7 @@
 
 **YEScale Benefits:**
 - **Cost Savings:** 20-80% reduction compared to original providers
-- **Unified API:** Single authentication cho multiple AI services  
+- **Unified API:** Single authentication cho multiple AI services
 - **Vietnamese Pricing:** VND-based billing với local payment methods
 - **Usage Tracking:** Real-time quota monitoring và detailed logs
 
@@ -36,7 +36,7 @@ ChatGPT-4o:
   YEScale: ~$0.015 input / ~$0.03 output (50% savings)
 
 Claude-3.5-Sonnet:
-  Anthropic Direct: $0.003 input / $0.015 output  
+  Anthropic Direct: $0.003 input / $0.015 output
   YEScale: ~$0.0015 input / ~$0.0075 output (50% savings)
 
 Gemini-2.0-Flash:
@@ -51,7 +51,7 @@ DALL-E 3:
   YEScale: ~$0.02 (50% savings)
 
 MidJourney:
-  Official: $10/month subscription (200 images)  
+  Official: $10/month subscription (200 images)
   YEScale: $0.02 per image (pay-per-use)
 
 Ideogram 3.0:
@@ -63,7 +63,7 @@ Ideogram 3.0:
 ```yaml
 Scenario 1 - Original Providers Only:
   Text Generation: $450/month
-  Image Generation: $240/month  
+  Image Generation: $240/month
   Total: $690/month
 
 Scenario 2 - YEScale Hybrid (80% YEScale):
@@ -91,7 +91,7 @@ Header Format:
 ```javascript
 // n8n Environment Variables
 N8N_YESCALE_API_KEY=your_yescale_access_key
-N8N_OPENAI_API_KEY=your_openai_fallback_key  
+N8N_OPENAI_API_KEY=your_openai_fallback_key
 N8N_CLAUDE_API_KEY=your_claude_fallback_key
 
 // Dynamic API Selection Logic
@@ -108,7 +108,7 @@ if (workflowType === 'standard' && !requiresSpecializedFeatures) {
 ```yaml
 Workflow Logic:
   1. Attempt YEScale API call
-  2. Check response quality/availability  
+  2. Check response quality/availability
   3. If issues detected → fallback to original provider
   4. Log decision và cost impact
 
@@ -151,7 +151,7 @@ Decision Matrix:
 ```
 nodes/
 ├── YEScale-ChatGPT/
-├── YEScale-Claude/  
+├── YEScale-Claude/
 ├── YEScale-DALLE/
 ├── YEScale-MidJourney/
 ├── YEScale-Gemini/
@@ -171,7 +171,7 @@ nodes/
 Trigger: Webhook (Telegram/Discord command)
 ↓
 YEScale ChatGPT Node: Generate initial content
-↓  
+↓
 YEScale DALL-E Node: Create supporting images
 ↓
 Cost Check: If budget exceeded → pause workflow
@@ -186,7 +186,7 @@ Trigger: High-priority design request
 Decision Node: Check request complexity
 ↓
 If Standard: Use YEScale MidJourney
-If Premium: Use Original MidJourney subscription  
+If Premium: Use Original MidJourney subscription
 ↓
 Quality Enhancement: Upscaling/refinement
 ↓
@@ -205,14 +205,14 @@ Client Delivery: Professional formatting
 const trackDailyCost = async () => {
   const yescaleUsage = await getYEScaleQuota();
   const originalAPICosts = await getOriginalProviderCosts();
-  
+
   const dailySummary = {
     yescale_cost: yescaleUsage.used_quota / 500000, // Convert to USD
     original_cost: originalAPICosts,
     total_savings: calculateSavings(),
     cost_per_workflow: totalCost / workflowCount
   };
-  
+
   await logCostData(dailySummary);
 };
 ```
@@ -261,7 +261,7 @@ YESCALE_API_KEY=your_access_key_here
 YESCALE_QUOTA_THRESHOLD=1000000  # Alert when quota below this
 YESCALE_ENABLE_FALLBACK=true
 
-# Cost Control Settings  
+# Cost Control Settings
 MAX_DAILY_COST_USD=50
 MAX_WORKFLOW_COST_USD=5
 COST_ALERT_WEBHOOK=https://api.strangematic.com/webhook/cost-alert
@@ -286,7 +286,7 @@ Access Control: Role-based permissions
 
 Network Security:
   YEScale calls: Through Cloudflare Tunnel only
-  Original API calls: Direct HTTPS với rate limiting  
+  Original API calls: Direct HTTPS với rate limiting
   Webhook endpoints: Authentication required
 ```
 
@@ -300,7 +300,7 @@ Terms Compliance:
 
 Data Privacy:
   - No sensitive data logging
-  - User prompt sanitization  
+  - User prompt sanitization
   - GDPR compliance cho EU users
   - Data retention policies
 ```
@@ -315,7 +315,7 @@ Data Privacy:
 - [ ] Implement cost tracking functionality
 - [ ] Create fallback mechanism
 
-### **Week 2: Hybrid Workflows**  
+### **Week 2: Hybrid Workflows**
 - [ ] Develop YEScale custom nodes
 - [ ] Implement decision logic cho API selection
 - [ ] Test workflow performance và cost impact
@@ -350,7 +350,7 @@ After YEScale Hybrid:
   Monthly API Costs: $414 (40% savings)
   Cost per workflow: $1.38
   Budget efficiency: 85%
-  
+
 Annual Savings: $3,312 (47% reduction)
 ```
 
@@ -366,9 +366,9 @@ Annual Savings: $3,312 (47% reduction)
 - Monthly API cost reduction: >35%
 - Cost per automation: <$1.50
 - Budget predictability: >90% accuracy
-- ROI improvement: >200% 
+- ROI improvement: >200%
 
-**Technical KPIs:**  
+**Technical KPIs:**
 - Workflow success rate: >98%
 - API response times: <3s average
 - Fallback utilization: <10% của total calls
@@ -388,7 +388,7 @@ Annual Savings: $3,312 (47% reduction)
 
 **Performance Review:**
 - API response time analysis
-- Workflow failure rate investigation  
+- Workflow failure rate investigation
 - User satisfaction survey results
 - Technical debt assessment
 
@@ -402,5 +402,5 @@ Annual Savings: $3,312 (47% reduction)
 
 *YEScale Hybrid Strategy designed cho maximum cost efficiency với enterprise-grade reliability và performance standards*
 
-**Next Update:** After Week 1 implementation results  
+**Next Update:** After Week 1 implementation results
 **Review Cycle:** Monthly optimization và quarterly strategy adjustment

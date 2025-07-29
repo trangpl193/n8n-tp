@@ -64,7 +64,7 @@ Fallback APIs (Premium features):
   OPENAI_API_KEY: [fallback_openai_key]
   CLAUDE_API_KEY: [fallback_claude_key]
   GOOGLE_AI_KEY: [fallback_google_key]
-  
+
 Cost Control Settings:
   MAX_DAILY_COST_USD: 50
   MAX_WORKFLOW_COST_USD: 5
