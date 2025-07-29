@@ -408,7 +408,7 @@ System Security:
 
 ## 💰 COST ANALYSIS & ROI
 
-### **📊 5-Year Total Cost of Ownership**
+### **📊 5-Year Total Cost of Ownership (Updated với YEScale Integration)**
 
 | Component | **Year 1** | **Annual** | **5-Year Total** |
 |-----------|-------------|------------|------------------|
@@ -418,21 +418,41 @@ System Security:
 | **Electricity (24/7)** | $180 | $180 | $900 |
 | **Internet (existing)** | $0* | $0 | $0 |
 | **UPS System** | $80 | $0 | $80 |
-| **Total Cost** | **$270** | **$190** | **$1,030** |
+| **🆕 API Costs (YEScale Hybrid)** | $414 | $414 | $2,070 |
+| **Total Cost** | **$684** | **$604** | **$3,100** |
 
 *Already owned/existing service
 
+#### **🎯 API Cost Optimization với YEScale Hybrid Strategy:**
+```yaml
+Original API Costs (Direct Providers):
+  - OpenAI ChatGPT: $450/month
+  - DALL-E/MidJourney: $240/month  
+  - Claude/Gemini: $150/month
+  - Total: $840/month ($10,080/year)
+
+YEScale Hybrid Strategy (40-80% Savings):
+  - YEScale Primary (80% usage): $276/month
+  - Original APIs (20% fallback): $138/month
+  - Total: $414/month ($4,968/year)
+  
+Annual API Savings: $5,112 (51% reduction)
+5-Year API Savings: $25,560
+```
+
 #### **Cost Comparison với Alternatives:**
 ```yaml
-Self-Hosted Solution: $1,030 (5 years)
+Self-Hosted với YEScale: $3,100 (5 years)
 vs
-VPS Hosting: $3,600 (5 years at $60/month)
+Self-Hosted với Direct APIs: $8,060 (5 years)
 vs
-Cloud Hosting: $6,000+ (5 years với scaling)
+VPS Hosting + APIs: $11,600 (5 years)
 vs
-SaaS Automation: $12,000+ (5 years subscription)
+Cloud Hosting + APIs: $14,000+ (5 years)
+vs
+SaaS Automation + APIs: $22,000+ (5 years)
 
-Savings: 70-90% vs commercial alternatives
+Savings: 61-86% vs alternatives
 ```
 
 ### **🎯 ROI Calculation**

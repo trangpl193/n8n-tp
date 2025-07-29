@@ -17,14 +17,16 @@
 - ✅ **Windows User:** Username cho automatic login setup
 
 **API Credentials (Phase 2):**
-- 🔄 **OpenAI API Key:** Get từ https://platform.openai.com/api-keys
+- 🔄 **YEScale API Key:** ⭐ **PRIMARY CHOICE** - Get từ https://yescale.bogia.app (40-80% cost savings)
+- 🔄 **OpenAI API Key:** **FALLBACK** - Get từ https://platform.openai.com/api-keys  
 - 🔄 **Figma Access Token:** Get từ https://help.figma.com/hc/en-us/articles/8085703771159
 - 🔄 **Telegram Bot Token:** Create với @BotFather
 - 🔄 **Discord Application:** Create tại https://discord.com/developers/applications
 
 **Accounts Setup Required:**
 - ✅ **Cloudflare:** Free account sufficient
-- 🔄 **OpenAI:** $20-50/month API usage estimate
+- 🆕 **YEScale:** VND-based billing, 40-80% cost savings vs original providers
+- 🔄 **OpenAI:** Fallback only - $10-20/month estimate (reduced usage)
 - 🔄 **Google Cloud:** Free tier sufficient cho initial testing
 
 ---
@@ -254,9 +256,27 @@ C:\automation\
 
 **Production:**
 - **Process Manager:** PM2 cho service management
-- **Monitoring:** Custom PowerShell scripts
+- **Monitoring:** Custom PowerShell scripts + YEScale usage tracking
 - **Backups:** Automated PostgreSQL dumps
 - **Logs:** Windows Event Log integration
+- **Cost Control:** YEScale hybrid API routing với fallback logic
+
+**API Configuration:**
+```yaml
+# Primary (YEScale) - Cost-optimized
+YESCALE_BASE_URL=https://yescale.bogia.app
+YESCALE_API_KEY=your_yescale_access_key
+YESCALE_ENABLE_FALLBACK=true
+
+# Fallback (Original Providers) - Premium features
+OPENAI_API_KEY=your_openai_fallback_key
+CLAUDE_API_KEY=your_claude_fallback_key
+GOOGLE_AI_KEY=your_google_fallback_key
+
+# Cost Control
+MAX_DAILY_COST_USD=50
+COST_ALERT_WEBHOOK=https://api.strangematic.com/webhook/cost-alert
+```
 
 **Workflow Lifecycle:**
 ```yaml
