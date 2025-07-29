@@ -1,55 +1,56 @@
 ---
-description: "USE WHEN optimizing performance, analyzing system resources, or implementing efficiency improvements on STRANGE system"
+description: "USE WHEN optimizing performance, analyzing system resources, or implementing efficiency improvements on Dell OptiPlex 3060"
 globs: ["**/*.ts", "**/*.js", "packages/**/*", "scripts/**/*", "**/performance*/**/*"]
 alwaysApply: true
 ---
 
-# Performance-First Development Rules với 80/20 Approach
+# Performance-First Development Rules với Conservative 80/20 Approach
 
 ## Core Performance Principles cho Product Designer
-- **Smart CPU Optimization**: Leverage 8 cores/16 threads của i9-9900K cho parallel processing - nhưng không over-engineer
-- **Efficient Memory Management**: Sử dụng 32GB RAM efficiently cho large datasets - focus vào actual needs
-- **Storage Priority**: Sử dụng SSD NVMe (E: drive) cho database và temp files - simple setup
-- **Batch Processing**: Process data theo batches của 100+ items khi necessary
-- **Async Operations**: Sử dụng async/await cho I/O operations - standard practice
-- **Smart Caching**: Implement Redis caching cho expensive operations chỉ khi cần thiết
+- **Conservative CPU Optimization**: Leverage 6 cores/6 threads của i5-8500T @2.1GHz một cách thông minh - avoid overloading
+- **Efficient Memory Management**: Sử dụng 16GB RAM efficiently cho moderate datasets - monitor usage carefully
+- **Storage Optimization**: Sử dụng limited 636GB storage effectively - regular cleanup essential
+- **Batch Processing**: Process data theo smaller batches của 50+ items (adjust cho limited resources)
+- **Async Operations**: Sử dụng async/await cho I/O operations - critical với slower CPU
+- **Smart Caching**: Implement lightweight caching cho expensive operations - memory-conscious
 
-## Resource Allocation - 80/20 Focused
-- **CPU allocation**: Allocate max 6 cores cho n8n processes (còn lại cho OS + multitasking)
-- **Memory management**: Reserve 4-8GB RAM cho n8n workflows (balance với other applications)
-- **Storage strategy**: Sử dụng E:/n8n-data/ cho all data storage (simple, effective)
-- **Performance monitoring**: Monitor memory usage với complex workflows (avoid memory leaks)
+## Resource Allocation - Conservative 80/20 Focused
+- **CPU allocation**: Allocate max 4 cores cho n8n processes (2 cores reserved cho OS stability)
+- **Memory management**: Reserve 2-4GB RAM cho n8n workflows (careful monitoring essential)
+- **Storage strategy**: Primary C: drive cho data, E: drive cho backups (manage space carefully)
+- **Performance monitoring**: Critical - monitor all resources với limited hardware capacity
 
-## Anti-Patterns to Avoid - Critical 20%
-- ❌ **Blocking operations** trong main thread (ảnh hưởng user experience)
-- ❌ **Memory leaks** từ accumulated data (system stability)
-- ❌ **Processing items one-by-one** khi có thể batch (efficiency)
-- ❌ **Using HDD** cho database operations (performance impact)
-- ❌ **Ignoring error handling** trong async operations (reliability)
-- ❌ **Over-optimization** những phần không critical (waste time)
+## Anti-Patterns to Avoid - Critical cho Limited Resources
+- ❌ **CPU-intensive operations** trong main thread (i5-8500T có limited performance)
+- ❌ **Memory leaks** từ accumulated data (critical với 16GB RAM limit)
+- ❌ **Large batch processing** without monitoring (can overwhelm system)
+- ❌ **Concurrent heavy operations** (limited cores và threads)
+- ❌ **Ignoring storage limits** (only 636GB total available)
+- ❌ **Running too many parallel workflows** (resource contention)
 
-## Performance Metrics to Track - Essential Only
-- **Processing time per batch**: Monitor để detect bottlenecks
-- **Memory usage patterns**: Track để prevent leaks
-- **Database connection time**: Ensure responsive user experience
-- **API response latency**: Critical cho user satisfaction
-- **Error rates**: Maintain system reliability
+## Performance Metrics to Track - Essential cho Limited Hardware
+- **CPU usage per core**: Monitor để prevent overload
+- **Memory usage patterns**: Critical tracking để prevent system slowdown
+- **Storage space usage**: Essential monitoring do limited capacity
+- **Response latency**: Monitor performance degradation
+- **System temperature**: T-series CPU thermal monitoring
+- **Error rates**: Increase khi system under stress
 
 ## Smart Performance Strategies cho Product Designer
-- **Progressive enhancement**: Start simple, optimize chỉ khi cần
-- **User-perceived performance**: Ưu tiên những gì user actually notice
-- **Background processing**: Move heavy tasks away từ user interaction
-- **Caching strategies**: Cache kết quả của expensive operations
-- **Lazy loading**: Load resources chỉ khi actually needed
+- **Progressive enhancement**: Start very simple, optimize cautiously
+- **User-perceived performance**: Focus vào responsive UI với limited resources
+- **Background processing**: Minimize background tasks để preserve resources
+- **Lightweight caching**: Use memory-efficient caching strategies
+- **Lazy loading**: Essential với limited system resources
 
 ## MCP Performance Considerations
-- **Service efficiency**: Design MCP services với performance trong mind
-- **Resource sharing**: Efficient resource usage across MCP services
-- **Background optimization**: Optimize MCP services in background không ảnh hưởng user workflow
+- **Service efficiency**: Design lightweight MCP services
+- **Resource sharing**: Careful resource allocation across MCP services
+- **Background optimization**: MCP services must run với minimal system impact
 
-## Quick Wins - 20% Effort, 80% Impact
-1. **Database indexing**: Add indexes cho frequently queried fields
-2. **Connection pooling**: Reuse database connections
-3. **Response compression**: Compress API responses
-4. **Static asset caching**: Cache images và static files
-5. **Query optimization**: Review và optimize slow queries
+## Quick Wins - 20% Effort, 80% Impact cho Limited Hardware
+1. **Memory monitoring**: Implement memory usage alerts
+2. **Connection pooling**: Reuse connections để save resources
+3. **Batch size optimization**: Find optimal batch sizes cho system capacity
+4. **Storage cleanup**: Automated cleanup cho space management
+5. **Resource throttling**: Implement throttling cho system protection

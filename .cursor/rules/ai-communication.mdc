@@ -11,12 +11,12 @@ alwaysApply: true
 - **Direct and Precise**: Use clear, unambiguous language cho technical specifications
 - **Technical Accuracy**: Provide exact specifications và requirements với độ chính xác cao
 - **Structured Format**: Use consistent formatting và organization theo chuẩn markdown
-- **Context-Aware**: Reference relevant system capabilities và constraints của STRANGE system
+- **Context-Aware**: Reference relevant system capabilities và constraints của Dell OptiPlex 3060
 - **Action-Oriented**: Focus on actionable instructions và decisions có thể implement ngay
 
 ## Language Patterns
 - **Technical terminology**: Sử dụng thuật ngữ chuyên môn phù hợp cho system-level operations
-- **Hardware specs reference**: Luôn tham chiếu cấu hình (i9-9900K, 32GB RAM, SSD NVMe) khi có liên quan
+- **Hardware specs reference**: Luôn tham chiếu cấu hình (i5-8500T, 16GB RAM, 636GB storage) khi có liên quan
 - **Performance metrics**: Include performance metrics và resource allocation details
 - **Exact file paths**: Specify exact file paths và configuration parameters
 - **Structured data formats**: Use JSON, YAML, configuration blocks với syntax highlighting

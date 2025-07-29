@@ -30,7 +30,7 @@ alwaysApply: true
 ## Framework Components
 - **Usability-first design**: Optimize cho Product Designer workflow, không chỉ performance
 - **Source code approach**: Sử dụng n8n source code, không Docker (flexibility cho customization)
-- **Hardware-aware**: Leverage i9-9900K, 32GB RAM, SSD NVMe một cách smart
+- **Hardware-aware**: Leverage i5-8500T, 16GB RAM, 636GB storage một cách smart và conservative
 - **Structured process**: Follow established templates nhưng adapt cho design needs
 - **Documentation-driven**: Maintain comprehensive documentation bằng tiếng Việt
 
