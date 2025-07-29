@@ -1,12 +1,177 @@
 # Phase 1: Foundation Setup Checklist
 
-**Timeline:** Tuần 1-2 (14 ngày)  
-**Target:** Windows 11 Pro + strangematic.com + Cloudflare Tunnel  
+**Timeline:** Tuần 1-2 (15 ngày bao gồm Day 0)
+**Target:** Windows 11 Pro + strangematic.com + Cloudflare Tunnel
 **Hardware:** Dell OptiPlex 3060 (i5-8500T, 16GB RAM, 636GB storage)
 
 ---
 
-## 🌐 WEEK 1: DOMAIN & INFRASTRUCTURE
+## 🌐 WEEK 1: WINDOWS INSTALLATION & INFRASTRUCTURE
+
+### **Day 0: Windows 11 Pro Installation & Setup (2-4 giờ)**
+
+**💻 Windows 11 Pro ISO Download:**
+```yaml
+Official Microsoft Downloads:
+□ Windows 11 Pro (64-bit): https://www.microsoft.com/en-us/software-download/windows11
+□ Media Creation Tool: https://go.microsoft.com/fwlink/?linkid=2156292
+□ Alternative: Windows 11 22H2 ISO (Latest): https://www.microsoft.com/software-download/windows11
+
+Dell OptiPlex 3060 Specific:
+□ Dell Support Drivers: https://www.dell.com/support/home/en-us/product-support/product/optiplex-3060-desktop
+□ Intel UHD Graphics 630 Driver: https://www.intel.com/content/www/us/en/support/products/graphics.html
+□ Intel Wireless-AC 9560 Driver: Included trong Windows 11
+```
+
+**🔧 BIOS/UEFI Configuration:**
+```yaml
+Dell OptiPlex 3060 BIOS Settings:
+□ Boot Mode: UEFI (not Legacy)
+□ Secure Boot: Enabled
+□ Fast Boot: Disabled (for troubleshooting)
+□ Network Boot: Disabled (security)
+□ USB Boot: Enabled (for installation)
+□ Intel VT (Virtualization): Enabled
+□ TPM 2.0: Enabled (required cho Windows 11)
+
+Boot Priority:
+□ 1st: USB Drive (cho installation)
+□ 2nd: Internal SSD (C: drive)
+□ 3rd: Network Boot (disabled)
+```
+
+**💾 Installation Media Preparation:**
+```yaml
+USB Installation Drive (8GB+):
+□ Download Windows 11 Pro ISO file
+□ Create bootable USB với Media Creation Tool
+□ OR use Rufus: https://rufus.ie/en/ (alternative tool)
+□ Verify USB boot functionality
+
+Installation Requirements:
+□ Product Key: Windows 11 Pro license
+□ Internet connection: For activation
+□ Backup: Any existing data (if needed)
+□ Time allocation: 2-4 hours total
+```
+
+**🚀 Windows 11 Pro Installation Steps:**
+```yaml
+Fresh Installation Process:
+□ Boot from USB installation media
+□ Language: English (hoặc Vietnamese theo preference)
+□ Edition: Windows 11 Pro (NOT Home)
+□ License: Enter product key (or skip cho now)
+□ Installation Type: Custom (Advanced) - Clean install
+□ Drive Configuration: 
+  - Delete all partitions (clean slate)
+  - Create new partition on full drive
+  - Format: NTFS
+□ Complete installation: 30-60 minutes
+
+Initial Setup (OOBE):
+□ Region: Vietnam (or your region)
+□ Keyboard: Vietnamese (or English US)
+□ Network: Connect to Wi-Fi/Ethernet
+□ Account Type: Local Account (NOT Microsoft Account)
+□ Username: Administrator (or your preference)
+□ Password: Strong password cho remote access
+□ Privacy Settings: Disable all telemetry options
+□ Microsoft Services: Decline all optional services
+```
+
+**⚙️ Essential Windows Configuration:**
+```yaml
+System Configuration:
+□ Windows Update: Install all critical updates
+□ Windows Defender: Configure real-time protection
+□ User Account Control (UAC): Set to default level
+□ Remote Desktop: Enable (Control Panel > System)
+□ File Explorer: Show hidden files và extensions
+□ Power Options: High Performance plan
+□ Network Profile: Set to Private (cho local network)
+
+Critical Settings:
+□ Computer Name: WINDOWS-PC (or your preference)
+□ Workgroup: WORKGROUP (default)
+□ Time Zone: Asia/Ho_Chi_Minh (or your timezone)
+□ Date/Time: Automatic synchronization
+□ Language Pack: Vietnamese support (if needed)
+□ Regional Format: Vietnamese (or your preference)
+```
+
+**📦 Essential Software Installation:**
+```yaml
+Development Tools:
+□ Google Chrome: https://www.google.com/chrome/
+□ Visual Studio Code: https://code.visualstudio.com/
+□ Git for Windows: https://git-scm.com/download/win
+□ Node.js LTS: https://nodejs.org/en/download/
+□ 7-Zip: https://www.7-zip.org/download.html
+
+System Utilities:
+□ UltraVNC Server: https://www.uvnc.com/downloads/ultravnc.html
+□ PowerShell 7: https://github.com/PowerShell/PowerShell/releases
+□ Windows Terminal: Microsoft Store (optional)
+□ CPU-Z: https://www.cpuid.com/softwares/cpu-z.html (hardware info)
+
+Database & Runtime:
+□ PostgreSQL 14+: https://www.postgresql.org/download/windows/
+□ pgAdmin 4: Included với PostgreSQL installation
+□ Microsoft Visual C++ Redistributables: Auto-installed with other software
+
+Network & Security:
+□ Cloudflared: https://github.com/cloudflare/cloudflared/releases
+□ Windows Firewall: Already included
+□ Windows Defender: Already included
+```
+
+**🔍 Dell OptiPlex 3060 Driver Installation:**
+```yaml
+Hardware Drivers:
+□ Dell Command Update: https://www.dell.com/support/kbdoc/en-us/000177325
+□ Intel Chipset Drivers: Usually auto-detected
+□ Intel UHD Graphics 630: Windows Update hoặc Intel website
+□ Intel Wireless-AC 9560: Windows Update (automatic)
+□ Audio Drivers: Realtek (Windows Update)
+□ Ethernet Driver: Intel (Windows Update)
+
+Dell-Specific Tools:
+□ Dell SupportAssist: https://www.dell.com/support/contents/en-us/category/product-support/self-support-knowledgebase/software-and-downloads/supportassist
+□ Dell BIOS Updates: Through Dell Command Update
+□ Hardware Diagnostics: Built into BIOS (F12 on boot)
+```
+
+**✅ Day 0 Verification:**
+```yaml
+System Health Check:
+□ Windows 11 Pro activated successfully
+□ All hardware detected correctly
+□ Internet connectivity working (Wi-Fi + Ethernet)
+□ Remote Desktop accessible từ local network
+□ Windows Updates completed
+□ Essential software installed và functional
+□ System performance: Normal boot time, responsive UI
+□ Storage: ~100GB used of 512GB C: drive
+□ Memory: 4GB+ available of 16GB total
+
+Hardware Verification:
+□ CPU: Intel i5-8500T showing 6 cores
+□ RAM: 16GB DDR4 detected
+□ Storage: Both C: (512GB) và E: (124GB) accessible
+□ Graphics: Intel UHD 630 working
+□ Network: Wi-Fi 751 Mbps + Ethernet available
+□ Audio: Working for remote access
+
+Security Verification:
+□ Windows Defender: Active protection
+□ Firewall: Enabled với default rules
+□ Remote access: Secure authentication enabled
+□ User accounts: Local admin account functional
+□ BIOS: Secure Boot và TPM 2.0 active
+```
+
+---
 
 ### **Day 1: Domain Configuration (30-60 phút)**
 
@@ -19,7 +184,7 @@
 ```dns
 Required Records:
 □ A Record: @ → 100.100.100.100 (Proxied ✅)
-□ CNAME: app → strangematic.com (Proxied ✅)  
+□ CNAME: app → strangematic.com (Proxied ✅)
 □ CNAME: api → strangematic.com (Proxied ✅)
 □ CNAME: status → strangematic.com (Proxied ✅)
 □ CNAME: docs → strangematic.com (Proxied ✅)
@@ -31,7 +196,7 @@ Required Records:
 - [ ] Always Use HTTPS: ✅ Enabled
 - [ ] HSTS: ✅ Enabled (1 year, include subdomains)
 - [ ] Security Level: Medium
-- [ ] Bot Fight Mode: ✅ Enabled  
+- [ ] Bot Fight Mode: ✅ Enabled
 - [ ] WAF: ✅ Enabled với OWASP rules
 
 **✅ Day 1 Verification:**
@@ -79,7 +244,7 @@ credentials-file: C:\cloudflared\cert.pem
 ingress:
   - hostname: app.strangematic.com
     service: http://localhost:5678
-  - hostname: api.strangematic.com  
+  - hostname: api.strangematic.com
     service: http://localhost:5678
     originRequest:
       httpHostHeader: api.strangematic.com
@@ -112,7 +277,7 @@ cloudflared tunnel run automation-hub-prod
 ```powershell
 # Run as Administrator
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v AutoAdminLogon /t REG_SZ /d 1 /f
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultUserName /t REG_SZ /d "YOUR_USERNAME" /f  
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultUserName /t REG_SZ /d "YOUR_USERNAME" /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultPassword /t REG_SZ /d "YOUR_PASSWORD" /f
 ```
 
@@ -135,7 +300,7 @@ powercfg /change usb-selective-suspend-setting 0
 ```yaml
 Inbound Rules (Allow):
 □ VNC Server: Port 5900 (UltraVNC)
-□ Remote Desktop: Port 3389 (RDP backup)  
+□ Remote Desktop: Port 3389 (RDP backup)
 □ n8n Application: Port 5678 (main app)
 □ Status Monitor: Port 8080 (health checks)
 □ HTTP: Port 80 (tunnel routing)
@@ -149,7 +314,7 @@ Outbound Rules (Review):
 
 **✅ Day 3-4 Verification:**
 - [ ] System boots automatically without login prompt
-- [ ] Power settings prevent sleep/hibernate  
+- [ ] Power settings prevent sleep/hibernate
 - [ ] Firewall rules configured correctly
 - [ ] System stable cho 24/7 operation
 
@@ -233,7 +398,7 @@ Test-NetConnection api.strangematic.com -Port 443
 **✅ Week 1 Completion Criteria:**
 ```yaml
 Infrastructure Status:
-✅ Domain: All subdomains resolve globally  
+✅ Domain: All subdomains resolve globally
 ✅ Security: A+ SSL rating achieved
 ✅ Tunnel: Healthy status 24/7 operation
 ✅ Remote: VNC + RDP access reliable
@@ -249,7 +414,7 @@ Infrastructure Status:
 
 **📦 Node.js Installation:**
 - [ ] Download LTS version từ https://nodejs.org/en/download
-- [ ] Install với default settings  
+- [ ] Install với default settings
 - [ ] Verify installation: `node --version && npm --version`
 - [ ] Configure npm global directory (optional)
 
@@ -475,6 +640,8 @@ Baseline Metrics:
 **✅ Phase 1 Completion Criteria:**
 ```yaml
 Infrastructure Ready:
+✅ Windows 11 Pro: Fresh installation completed successfully
+✅ Drivers & Software: All essential software installed
 ✅ Domain: strangematic.com fully operational
 ✅ Security: Enterprise-grade Cloudflare protection
 ✅ Access: Remote management 24/7 capable
@@ -488,6 +655,28 @@ Success Rate Target: >98% uptime trong testing period
 ---
 
 ## 📋 TROUBLESHOOTING COMMON ISSUES
+
+### **🚨 Windows Installation Issues:**
+```yaml
+Problem: Installation hangs or fails
+Solution:
+  1. Verify BIOS settings (UEFI mode, Secure Boot)
+  2. Check USB installation media integrity
+  3. Test RAM với MemTest86+ (hardware issue)
+  4. Update BIOS to latest version
+  5. Try different USB port or USB drive
+```
+
+### **🚨 Driver Issues:**
+```yaml
+Problem: Hardware not detected properly
+Solution:
+  1. Run Windows Update to auto-install drivers
+  2. Download Dell Command Update tool
+  3. Install drivers directly từ Dell website
+  4. Check Device Manager for unknown devices
+  5. Reboot after each driver installation
+```
 
 ### **🚨 DNS Issues:**
 ```yaml
@@ -541,7 +730,7 @@ Solution:
 
 **Performance Optimization:**
 - Resource monitoring scripts implemented
-- Automated backup strategy configured  
+- Automated backup strategy configured
 - Security audit và penetration testing scheduled
 - Documentation updates với actual production values
 
@@ -549,5 +738,5 @@ Solution:
 
 *Phase 1 Checklist designed cho Windows headless automation hub với enterprise-grade reliability và security standards*
 
-**Estimated Completion:** 14 days  
-**Success Criteria:** >98% uptime, <3s response times, full remote accessibility
+**Estimated Completion:** 15 ngày (bao gồm Day 0 Windows installation)
+**Success Criteria:** >98% uptime, <3s response times, full remote accessibility, complete Windows setup

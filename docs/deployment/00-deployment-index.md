@@ -1,7 +1,7 @@
 # Deployment Checklist Index - strangematic.com Automation Hub
 
-**Total Timeline:** 8 tuần (56 ngày)  
-**Target:** Windows 11 Pro + n8n Source Code + Cloudflare Tunnel + YEScale API  
+**Total Timeline:** 8 tuần (56 ngày)
+**Target:** Windows 11 Pro + n8n Source Code + Cloudflare Tunnel + YEScale API
 **Hardware:** Dell OptiPlex 3060 (i5-8500T, 16GB RAM, 636GB storage)
 
 ---
@@ -31,6 +31,8 @@
 
 ```yaml
 Objectives:
+□ Windows 11 Pro fresh installation
+□ Essential software và driver setup
 □ Domain và DNS configuration (strangematic.com)
 □ Cloudflare Tunnel setup và security
 □ Windows 11 Pro headless configuration
@@ -38,7 +40,7 @@ Objectives:
 □ n8n source code deployment
 □ PostgreSQL database setup
 
-Timeline: 14 ngày
+Timeline: 15 ngày (bao gồm Day 0 Windows installation)
 Success Criteria: >98% uptime, full remote accessibility
 ```
 
@@ -56,7 +58,7 @@ Objectives:
 □ Advanced integration workflows
 □ Production optimization
 
-Timeline: 14 ngày  
+Timeline: 14 ngày
 Success Criteria: >95% workflow success, <$50/day costs
 ```
 
