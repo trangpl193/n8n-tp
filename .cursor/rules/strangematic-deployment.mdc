@@ -23,20 +23,20 @@ app.strangematic.com:     # Main n8n interface (localhost:5678)
   purpose: Primary automation dashboard
   target: Windows Dell OptiPlex 3060
   auth: n8n user management
-  
-api.strangematic.com:     # Webhook endpoints  
+
+api.strangematic.com:     # Webhook endpoints
   purpose: Bot integration endpoints
-  routes: 
+  routes:
     - /webhook/telegram
     - /webhook/discord
     - /webhook/openai
     - /webhook/figma
-    
+
 status.strangematic.com:  # System monitoring
   purpose: Health checks và uptime monitoring
   target: localhost:8080
   metrics: CPU, RAM, disk, tunnel health
-  
+
 docs.strangematic.com:    # API documentation
   purpose: Workflow documentation và API guides
   content: Integration guides, troubleshooting
@@ -54,15 +54,15 @@ service: Windows Service (auto-start)
 ingress_rules:
   - hostname: app.strangematic.com
     service: http://localhost:5678
-    
-  - hostname: api.strangematic.com  
+
+  - hostname: api.strangematic.com
     service: http://localhost:5678
     originRequest:
       httpHostHeader: api.strangematic.com
-      
+
   - hostname: status.strangematic.com
     service: http://localhost:8080
-    
+
   - service: http_status:404
 ```
 
@@ -71,7 +71,7 @@ ingress_rules:
 # Primary Records
 Type    Name                    Content                 Proxy
 A       strangematic.com        100.100.100.100        Yes
-CNAME   app                     strangematic.com        Yes  
+CNAME   app                     strangematic.com        Yes
 CNAME   api                     strangematic.com        Yes
 CNAME   status                  strangematic.com        Yes
 CNAME   www                     strangematic.com        Yes
@@ -92,7 +92,7 @@ Telegram Bot:
     - /create: Design automation workflows
     - /project: Project management updates
     - /status: System health checks
-    
+
 Discord Bot:
   webhook_url: https://api.strangematic.com/webhook/discord
   slash_commands:
@@ -183,15 +183,15 @@ DISCORD_BOT_TOKEN=xxx
 Primary Health Check:
   url: https://status.strangematic.com/health
   response: {"status": "healthy", "uptime": "99.8%"}
-  
+
 Tunnel Health:
   url: https://status.strangematic.com/tunnel
   response: {"tunnel": "connected", "latency": "15ms"}
-  
+
 Database Health:
   url: https://status.strangematic.com/database
   response: {"db": "connected", "connections": 12}
-  
+
 Workflow Health:
   url: https://status.strangematic.com/workflows
   response: {"active": 15, "queued": 3, "failed": 0}
@@ -213,7 +213,7 @@ Resource Usage:
 
 Uptime Targets:
   System Uptime: >99.5% monthly
-  Tunnel Uptime: >99.9% monthly  
+  Tunnel Uptime: >99.9% monthly
   Workflow Success: >95% completion rate
 ```
 
@@ -222,14 +222,14 @@ Uptime Targets:
 ### **Cloudflare Security Settings**
 ```yaml
 DDoS Protection: Automatic (enterprise-grade)
-Bot Management: 
+Bot Management:
   - Challenge suspicious traffic
   - Allow verified automation tools
-  
+
 Rate Limiting:
   - 100 requests/minute per IP
   - 1000 requests/hour per API key
-  
+
 WAF Rules:
   - OWASP Top 10 protection
   - Custom rules cho webhook endpoints
@@ -249,12 +249,12 @@ Authentication:
   - OAuth2 integration (Google/Microsoft)
   - API key management
   - Session timeout: 8 hours
-  
+
 Authorization:
   - Role-based access control
   - Webhook endpoint protection
   - Database user permissions
-  
+
 Data Protection:
   - Encryption at rest (AES-256)
   - Encryption in transit (TLS 1.3)
@@ -270,7 +270,7 @@ Data Protection:
   - strangematic.com registered via Cloudflare
   - DNS records configured
   - SSL certificates active
-  
+
 ✅ Tunnel Setup:
   - cloudflared installed on Windows
   - Tunnel authenticated và active

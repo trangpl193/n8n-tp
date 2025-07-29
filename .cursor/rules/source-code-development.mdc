@@ -54,7 +54,7 @@ Security Configuration:
   N8N_SECURE_COOKIE: true
   N8N_JWT_SECRET: [secure_jwt_secret]
   N8N_ENCRYPTION_KEY: [secure_encryption_key]
-  
+
 Performance Configuration:
   N8N_EXECUTIONS_TIMEOUT: 3600
   N8N_EXECUTIONS_TIMEOUT_MAX: 7200
@@ -101,19 +101,19 @@ Custom Node Development:
   - Content generation nodes (OpenAI + templates)
   - Project management nodes (status tracking)
   - Social media automation nodes
-  
+
 Core Workflow Optimization:
   - Webhook endpoint customization
   - Error handling và retry logic
   - Performance monitoring integration
   - Resource usage optimization
-  
+
 Database Customization:
   - Custom tables cho project tracking
   - Workflow metrics và analytics
   - User activity logging
   - Performance data storage
-  
+
 API Modifications:
   - Custom authentication endpoints
   - Webhook validation logic
@@ -129,13 +129,13 @@ Development Process:
      - Develop với source code
      - Test on local development server
      - Deploy to production environment
-     
+
   2. Testing Strategy:
      - Unit tests cho custom nodes
      - Integration tests cho workflows
      - End-to-end tests via webhooks
      - Performance testing với real data
-     
+
   3. Deployment Process:
      - Git-based deployment
      - PM2 service restart
@@ -197,7 +197,7 @@ Development Metrics:
   - Feature development cycle time
   - Bug discovery và fix time
   - Performance regression detection
-  
+
 Production Metrics:
   - Workflow execution success rate
   - API response times
@@ -218,7 +218,7 @@ Code Security:
   - SQL injection prevention
   - XSS protection implemented
   - API key management secure
-  
+
 Environment Security:
   - Environment variables encrypted
   - Database connections secured
@@ -239,7 +239,7 @@ Resource Optimization:
   - CPU utilization tracking
   - Database query optimization
   - Network bandwidth management
-  
+
 Code Optimization:
   - Async/await patterns enforced
   - Error handling optimized
@@ -258,7 +258,7 @@ System Optimization:
 Required Tools:
   - Visual Studio Code with extensions
   - Node.js LTS version
-  - PostgreSQL 14+ 
+  - PostgreSQL 14+
   - Git for version control
   - PM2 for process management
   - Cloudflared for tunnel management
