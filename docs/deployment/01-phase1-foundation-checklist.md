@@ -63,7 +63,7 @@ Fresh Installation Process:
 □ Edition: Windows 11 Pro (NOT Home)
 □ License: Enter product key (or skip cho now)
 □ Installation Type: Custom (Advanced) - Clean install
-□ Drive Configuration: 
+□ Drive Configuration:
   - Delete all partitions (clean slate)
   - Create new partition on full drive
   - Format: NTFS
@@ -110,7 +110,7 @@ Development Tools:
 □ 7-Zip: https://www.7-zip.org/download.html
 
 System Utilities:
-□ UltraVNC Server: https://www.uvnc.com/downloads/ultravnc.html
+□ UltraViewer: https://www.ultraviewer.net/en/download
 □ PowerShell 7: https://github.com/PowerShell/PowerShell/releases
 □ Windows Terminal: Microsoft Store (optional)
 □ CPU-Z: https://www.cpuid.com/softwares/cpu-z.html (hardware info)
@@ -299,7 +299,6 @@ powercfg /change usb-selective-suspend-setting 0
 **🔥 Windows Firewall Configuration:**
 ```yaml
 Inbound Rules (Allow):
-□ VNC Server: Port 5900 (UltraVNC)
 □ Remote Desktop: Port 3389 (RDP backup)
 □ n8n Application: Port 5678 (main app)
 □ Status Monitor: Port 8080 (health checks)
@@ -307,6 +306,7 @@ Inbound Rules (Allow):
 □ HTTPS: Port 443 (tunnel routing)
 
 Outbound Rules (Review):
+□ UltraViewer: Allow all HTTPS connections
 □ Cloudflare Tunnel: Allow all HTTPS
 □ API Calls: Allow HTTPS to YEScale, OpenAI, etc.
 □ Windows Updates: Allow as needed
@@ -322,24 +322,26 @@ Outbound Rules (Review):
 
 ### **Day 5-6: Remote Access Setup (1-2 giờ)**
 
-**👁️ UltraVNC Server Installation:**
-- [ ] Download từ https://www.uvnc.com/downloads/ultravnc.html
-- [ ] Install: UltraVNC Server + Viewer
+**👁️ UltraViewer Installation:**
+- [ ] Download từ https://www.ultraviewer.net/en/download
+- [ ] No installation required: Portable executable (~6MB)
 - [ ] Configuration:
-  - VNC Password: [Secure password - document securely]
-  - MS Logon Authentication: ✅ Enabled
-  - Install as Service: ✅ Yes
-  - Auto-start with Windows: ✅ Yes
+  - Save to: C:\automation\remote-access\UltraViewer.exe
+  - Run và note unique ID (e.g., 123 456 789)
+  - Set secure password cho unattended access
+  - Enable "Start with Windows" option
+  - Test local connection first
 
-**🌐 UltraVNC Network Settings:**
+**🌐 UltraViewer Network Settings:**
 ```yaml
 Configuration:
-- HTTP Port: 5800
-- VNC Port: 5900 (Main)
+- Connection Type: P2P cloud-routed (no port forwarding needed)
+- ID: [Generated unique ID - document securely]
+- Password: [Secure password - document securely]
 - Auto Accept: ❌ Disabled (security)
-- View Only: ❌ Disabled (full control needed)
-- Remove Wallpaper: ✅ Enabled (performance)
-- Disable Effects: ✅ Enabled (performance)
+- Auto-start: ✅ Enabled (with Windows boot)
+- File Transfer: ✅ Enabled
+- Chat Window: ✅ Enabled (F1 hotkey)
 ```
 
 **🔄 Remote Desktop Protocol (RDP) Backup:**
@@ -354,11 +356,11 @@ Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
 **✅ Day 5-6 Verification:**
 ```yaml
 Remote Access Tests:
-□ VNC connection từ local network successful
-□ VNC performance acceptable (smooth cursor/typing)
+□ UltraViewer connection từ external network successful
+□ Connection performance acceptable (smooth cursor/typing)
 □ RDP connection working as backup
-□ Both methods auto-start với Windows boot
-□ Security: Connections require authentication
+□ UltraViewer auto-starts với Windows boot
+□ Security: Connections require ID + password authentication
 ```
 
 ---
@@ -710,12 +712,13 @@ Solution:
 
 ### **🚨 Remote Access Problems:**
 ```yaml
-Problem: VNC connection refused
+Problem: UltraViewer connection refused
 Solution:
-  1. Check UltraVNC service status
-  2. Verify Windows firewall rules
-  3. Test local connection first (localhost:5900)
-  4. Review VNC server configuration
+1. Check UltraViewer process running
+2. Verify internet connectivity
+3. Test with different network connection
+4. Check UltraViewer ID và password
+5. Use RDP backup access (Port 3389)
 ```
 
 ---

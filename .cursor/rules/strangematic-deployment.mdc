@@ -1,8 +1,3 @@
----
-description: "USE WHEN implementing strangematic.com automation hub, configuring Cloudflare Tunnel, or deploying Windows headless workflows"
-globs: ["**/strangematic*", "**/cloudflare*", "**/tunnel*", "**/webhook*", "**/automation*", "docs/analysis/**/*", "**/setup*", "**/deploy*"]
-alwaysApply: false
----
 
 # Strangematic.com Automation Hub Deployment Rules
 
@@ -279,39 +274,9 @@ Data Protection:
 
 ✅ System Preparation:
   - Windows optimized cho headless operation
-  - UltraVNC configured cho remote access
+  - UltraViewer configured cho remote access
   - PostgreSQL installed và configured
   - n8n source code deployed
-```
-
-### **Phase 2: Integration (Week 3-4)**
-```yaml
-✅ Bot Integration:
-  - Telegram bot created và configured
-  - Discord application setup
-  - Webhook endpoints tested
-  - Command responses verified
-
-✅ API Configuration:
-  - OpenAI API integrated
-  - Figma API connected
-  - Google Workspace configured
-  - Error handling implemented
-```
-
-### **Phase 3: Production (Week 5-8)**
-```yaml
-✅ Workflow Deployment:
-  - Design automation workflows
-  - Content generation workflows
-  - Project management workflows
-  - Monitoring và alerting
-
-✅ Go-Live:
-  - Performance testing completed
-  - Security validation passed
-  - Documentation finalized
-  - Training materials ready
 ```
 
 ## 💡 TROUBLESHOOTING GUIDE
@@ -368,3 +333,9 @@ Contact & Support:
 ---
 
 *Deployment rule designed cho strangematic.com automation hub với enterprise-grade reliability và security standards*
+
+
+---
+
+*Deployment rule designed cho strangematic.com automation hub với enterprise-grade reliability và security standards*
+

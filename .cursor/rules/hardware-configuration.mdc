@@ -61,7 +61,7 @@ alwaysApply: true
 - **Security**: Enterprise-grade DDoS protection, WAF, rate limiting
 
 ## Practical Usage Guidelines cho Windows Headless Automation Hub
-- **Headless Operation**: UltraVNC + Remote Desktop cho 24/7 management
+- **Headless Operation**: UltraViewer + Remote Desktop cho 24/7 management
 - **Resource Monitoring**: Critical - monitor CPU và RAM usage carefully với professional workloads
 - **Storage Management**: Essential - automated cleanup và asset archiving
 - **Workflow Complexity**: Design cho enterprise automation với moderate complexity

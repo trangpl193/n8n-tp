@@ -163,26 +163,25 @@
    powercfg /change standby-timeout-dc 0
    ```
 
-3. **UltraVNC Installation:**
+3. **UltraViewer Installation:**
    ```
-   Download: https://www.uvnc.com/downloads/ultravnc.html
-   Install: UltraVNC Server + Viewer
+   Download: https://www.ultraviewer.net/en/download
+   Setup: Portable executable, no installation required
    Configuration:
-   - VNC Password: [Your secure password]
-   - Install as Service: ✅ Yes
-   - Auto-start: ✅ Yes
+   - Save to: C:\automation\remote-access\UltraViewer.exe
+   - Set unattended access password
+   - Enable auto-start với Windows
    ```
 
 4. **Windows Firewall:**
    ```yaml
    Inbound Rules (Allow):
-   - VNC Server: Port 5900
    - Remote Desktop: Port 3389
    - n8n Application: Port 5678
    - Status Monitor: Port 8080
    ```
 
-**✅ Verification:** Test VNC connection từ another device on network
+**✅ Verification:** Test UltraViewer connection từ external network
 
 ---
 
@@ -311,7 +310,7 @@ Maintenance:
 
 2. **Download Required Software**
    - Cloudflared Windows executable
-   - UltraVNC installer
+   - UltraViewer portable executable
    - Node.js LTS installer
 
 3. **Prepare Network**

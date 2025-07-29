@@ -331,7 +331,7 @@ def recommend_option(requirements):
 - **Domain:** strangematic.com via Cloudflare Registrar
 - **Network:** Cloudflare Tunnel (zero port forwarding)
 - **Database:** PostgreSQL 14+
-- **Remote Access:** UltraVNC + Remote Desktop
+- **Remote Access:** UltraViewer + Remote Desktop
 - **Hardware:** Dell OptiPlex 3060 (i5-8500T, 16GB RAM, 636GB storage)
 - **Setup Time:** 8 weeks comprehensive implementation
 - **Total Cost:** $270 Year 1, $190 annually thereafter
@@ -341,7 +341,7 @@ def recommend_option(requirements):
 - 🌍 **Global Performance:** Sub-200ms response times worldwide
 - 💰 **Exceptional Value:** $10/year networking vs $100+ alternatives
 - 🖥️ **Native Windows:** Full Figma plugin ecosystem support
-- 👁️ **Perfect Remote Access:** UltraVNC headless operation capability
+- 👁️ **Perfect Remote Access:** UltraViewer cloud-routed operation capability
 - 🤖 **AI Integration Ready:** Professional webhook endpoints cho chatbots
 - 📈 **Enterprise Scalable:** Foundation cho future growth
 - 🔒 **Professional Security:** Enterprise-grade protection included

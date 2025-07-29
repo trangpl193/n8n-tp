@@ -307,70 +307,74 @@ Services to Keep Enabled:
 **Windows Defender Firewall:**
 ```yaml
 Inbound Rules (Allow):
-- VNC Server (Port 5900)
 - Remote Desktop (Port 3389)
 - n8n Application (Port 5678)
 - Status Monitor (Port 8080)
 
 Outbound Rules:
-- Allow all (default)
+- UltraViewer: Allow all HTTPS connections
 - Monitor for webhook traffic
-```
 
 ---
 
-## 👁️ STEP 4: ULTRAVNC SETUP
+## 👁️ STEP 4: ULTRAVIEWER SETUP
 
-### **A. UltraVNC Installation**
+### **A. UltraViewer Installation**
 
-**Download & Install:**
-1. Download from [UltraVNC Official](https://www.uvnc.com/downloads/ultravnc.html)
-2. Choose: UltraVNC Server + Viewer
-3. Install with default settings
-4. Configure during installation
+**Download & Setup:**
+1. Download từ [UltraViewer Official](https://www.ultraviewer.net/en/download)
+2. No installation required: Portable executable (~6MB)
+3. Save to: C:\automation\remote-access\UltraViewer.exe
+4. Run và configure unattended access
 
-### **B. Server Configuration**
+### **B. Initial Configuration**
 
-**UltraVNC Server Settings:**
+**UltraViewer Basic Settings:**
 ```yaml
-Authentication:
-- VNC Password: [Strong Password]
-- MS Logon: ✅ Enabled (additional security)
+Connection Settings:
+- Unique ID: [Generated automatically - note down]
+- Access Password: [Set secure password]
+- Connection Type: P2P cloud-routed
 
-Network Settings:
-- HTTP Port: 5800
-- VNC Port: 5900
+Security Settings:
 - Auto Accept: ❌ Disabled (security)
+- Unattended Access: ✅ Enabled
+- File Transfer: ✅ Enabled
+- Chat Window: ✅ Enabled (F1 hotkey)
 
-Display Settings:
-- Remove Desktop Wallpaper: ✅ Yes (performance)
-- Remove Desktop Effects: ✅ Yes (performance)
+Performance Settings:
+- Display Quality: Balanced (not highest)
+- Remove Wallpaper: ✅ Yes (performance)
 - Block Remote Input: ❌ No (needed for control)
 ```
 
-### **C. Windows Service Setup**
+### **C. Windows Auto-Start Setup**
 
 ```powershell
-# Install as Windows Service (Run as Administrator)
-# During UltraVNC installation, choose "Install as Service"
+# Create scheduled task cho auto-start (Run as Administrator)
+$TaskName = "UltraViewerAutoStart"
+$TaskPath = "C:\automation\remote-access\UltraViewer.exe"
 
-# Verify service status
-sc query uvnc_service
+# Create scheduled task
+$Action = New-ScheduledTaskAction -Execute $TaskPath
+$Trigger = New-ScheduledTaskTrigger -AtStartup
+$Settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable
+$Principal = New-ScheduledTaskPrincipal -UserId "SYSTEM" -LogonType ServiceAccount -RunLevel Highest
 
-# Start service
-sc start uvnc_service
+Register-ScheduledTask -TaskName $TaskName -Action $Action -Trigger $Trigger -Settings $Settings -Principal $Principal
 
-# Set auto-start
-sc config uvnc_service start= auto
+# Verify task created
+Get-ScheduledTask -TaskName $TaskName
 ```
 
 ### **D. Test Remote Access**
 
-**Local Network Test:**
-1. From another computer on same network
-2. Use UltraVNC Viewer
-3. Connect to: `192.168.1.xxx:5900`
-4. Verify desktop display và control
+**Connection Test:**
+1. Từ another computer hoặc mobile device
+2. Download UltraViewer viewer
+3. Enter ID: [Your computer's unique ID]
+4. Enter password: [Your set password]
+5. Verify desktop display và control
 
 ---
 
@@ -378,12 +382,23 @@ sc config uvnc_service start= auto
 
 ### **A. Basic Health Monitoring**
 
-**Create: `C:\monitoring\health-check.ps1`**
+**Create: `C:\automation\monitoring\health-check.ps1`**
 ```powershell
-# Simple health check script
-$services = @("uvnc_service", "cloudflared")
-$ports = @(5678, 5900, 8080)
+# Updated health check script với UltraViewer monitoring
+$services = @("cloudflared")
+$ports = @(5678, 8080)
+$processes = @("UltraViewer")
 
+# Check UltraViewer process
+$ultraviewerProcess = Get-Process -Name "UltraViewer" -ErrorAction SilentlyContinue
+if ($ultraviewerProcess) {
+    Write-Output "UltraViewer: RUNNING (PID: $($ultraviewerProcess.Id))"
+} else {
+    Write-Output "UltraViewer: NOT RUNNING - RESTARTING"
+    Start-Process "C:\automation\remote-access\UltraViewer.exe" -WindowStyle Hidden
+}
+
+# Check cloudflared service
 foreach ($service in $services) {
     $status = Get-Service -Name $service -ErrorAction SilentlyContinue
     if ($status.Status -eq "Running") {
@@ -393,6 +408,7 @@ foreach ($service in $services) {
     }
 }
 
+# Check required ports
 foreach ($port in $ports) {
     $connection = Test-NetConnection -ComputerName localhost -Port $port -WarningAction SilentlyContinue
     if ($connection.TcpTestSucceeded) {
@@ -400,6 +416,14 @@ foreach ($port in $ports) {
     } else {
         Write-Output "Port $port: FAILED"
     }
+}
+
+# Check internet connectivity
+$internetTest = Test-NetConnection -ComputerName "8.8.8.8" -Port 443 -WarningAction SilentlyContinue
+if ($internetTest.TcpTestSucceeded) {
+    Write-Output "Internet Connectivity: OK"
+} else {
+    Write-Output "Internet Connectivity: FAILED"
 }
 ```
 
@@ -431,20 +455,22 @@ Priority: Normal
    - All hostname routes configured
    - Traffic routing working
 
-✅ Windows Configuration:
-   - Automatic login functional
+✅ Windows Headless:
+   - Automatic login configured
    - Power management optimized
-   - Services running properly
+   - UltraViewer accessible remotely
 
 ✅ Remote Access:
-   - UltraVNC accessible locally
-   - Remote Desktop backup working
-   - No conflicts between services
+   - UltraViewer connection successful
+   - Desktop control responsive
+   - File transfer functional
+   - Auto-start với Windows boot verified
 
-✅ Monitoring:
-   - Health checks operational
-   - Logging configured
-   - Alert mechanisms ready
+✅ Application Platform:
+   - n8n installed và running
+   - Database connection established
+   - All services auto-start
+   - Basic monitoring active
 ```
 
 ### **Next Phase Preparation:**

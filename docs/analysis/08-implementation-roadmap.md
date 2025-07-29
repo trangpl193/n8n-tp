@@ -18,7 +18,7 @@ Kế hoạch triển khai được chia thành 4 giai đoạn chính với timel
 - **Database:** PostgreSQL 14+ (production-grade)
 - **Network:** Cloudflare Tunnel (zero port forwarding)
 - **Domain:** strangematic.com (professional endpoints)
-- **Remote Access:** UltraVNC + Remote Desktop (24/7 headless operation)
+- **Remote Access:** UltraViewer + Remote Desktop (24/7 headless operation)
 
 ---
 
@@ -91,13 +91,11 @@ DNS Configuration:
 #### **Week 2: Remote Access & System Security**
 
 **👁️ Remote Management Setup**
-- [ ] **UltraVNC Server Configuration**
-  - Install UltraVNC Server với encryption
-  - Configure authentication và access control
-  - Setup automatic startup với Windows
-  - Test remote desktop functionality
-  - Configure firewall exceptions cho VNC
-  - **Deliverable:** Reliable headless remote access
+- [ ] **UltraViewer Remote Access Configuration**
+  - Download UltraViewer portable executable
+  - Configure unattended access với ID/password
+  - Setup auto-start với Windows boot
+  - Test remote connection capability
 
 - [ ] **Windows Remote Desktop Backup**
   - Enable Windows Remote Desktop Protocol

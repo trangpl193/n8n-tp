@@ -579,7 +579,7 @@ Days 5-7: Tunnel Installation
 Week 2: System Preparation
 Days 1-3: Windows Optimization
   - Configure headless operation
-  - Setup remote access (UltraVNC)
+  - Setup remote access (UltraViewer)
   - Configure automatic login
   - Install required software stack
 

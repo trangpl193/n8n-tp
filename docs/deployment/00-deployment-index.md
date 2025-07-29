@@ -36,7 +36,7 @@ Objectives:
 □ Domain và DNS configuration (strangematic.com)
 □ Cloudflare Tunnel setup và security
 □ Windows 11 Pro headless configuration
-□ Remote access setup (UltraVNC + RDP)
+□ Remote access setup (UltraViewer remote desktop)
 □ n8n source code deployment
 □ PostgreSQL database setup
 
@@ -173,7 +173,7 @@ Core Platform:
 
 Network & Security:
 □ Cloudflared (GitHub releases)
-□ UltraVNC Server (uvnc.com)
+□ UltraViewer (ultraviewer.net)
 □ Windows Firewall configuration
 □ Cloudflare dashboard access
 
@@ -342,3 +342,13 @@ Documentation Deliverables:
 *Deployment Index designed cho systematic implementation của enterprise-grade Windows automation hub với YEScale cost optimization và Cloudflare security*
 
 **Next Step:** Begin Phase 1 với DNS configuration cho strangematic.com domain
+
+## 📁 DEPLOYMENT DOCUMENTATION
+
+### **Core Deployment Guides:**
+- **[Phase 1: Foundation Setup](01-phase1-foundation-checklist.md)** - Windows, domain, n8n installation
+- **[Phase 4: Production Launch](04-phase4-production-launch-checklist.md)** - Go-live checklist
+
+### **Supporting Documentation:**
+- **[Backup & Restore Strategy](02-backup-restore-strategy.md)** - Comprehensive backup procedures
+- **[Backup Quick Reference](03-backup-quick-reference.md)** - Emergency recovery guide
