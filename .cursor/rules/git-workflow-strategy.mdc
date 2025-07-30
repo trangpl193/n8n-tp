@@ -1,0 +1,252 @@
+---
+description: "Git workflow strategy với single repository approach cho n8n production development. Áp dụng khi làm việc với git branches, deployment, và AI Agent automation cho strangematic.com hub."
+globs:
+  - "**/.git/**"
+  - "**/package.json"
+  - "**/pnpm-lock.yaml"
+  - "**/ecosystem.*.config.js"
+  - "**/.env.*"
+  - "**/docs/**"
+  - "**/*.md"
+alwaysApply: false
+---
+
+# Git Workflow Strategy Rules cho n8n Production Development
+
+## Core Principles - Single Repository Approach
+
+### **Repository Structure (MANDATORY)**
+```yaml
+Location: C:\automation\n8n\                 # Single Git repository only
+Storage: ~800MB total (vs 2.4GB+ multiple folders)
+Branches:
+  - main: Production-ready code (protected)
+  - develop: Integration branch
+  - feature/*: Feature development
+  - hotfix/*: Emergency production fixes
+```
+
+### **Environment Management Strategy**
+```yaml
+Configs Location: C:\automation\environments\
+Files:
+  - .env.production: Production settings
+  - .env.development: Development settings
+  - ecosystem.production.config.js: PM2 production
+  - ecosystem.development.config.js: PM2 development
+
+Database Strategy:
+  - strangematic_n8n_prod: Production database
+  - strangematic_n8n_dev: Development database
+```
+
+## Git Workflow Commands cho AI Agent
+
+### **Repository Setup (Initial)**
+```powershell
+# Clone original n8n repository
+cd C:\automation
+git clone https://github.com/n8n-io/n8n.git
+cd n8n
+
+# Setup custom remote (recommended)
+git remote add strangematic https://github.com/your-username/n8n-strangematic.git
+
+# Create develop branch
+git checkout -b develop
+git push -u strangematic develop
+```
+
+### **Feature Development Workflow**
+```powershell
+# Start new feature (AI Agent pattern)
+git checkout develop
+git pull strangematic develop
+git checkout -b feature/feature-name
+
+# Development cycle
+# - Code changes
+# - Local testing với development environment
+# - Build: pnpm run build
+
+# Commit và push
+git add .
+git commit -m "feat: description"
+git push -u strangematic feature/feature-name
+
+# Integration
+git checkout develop
+git merge feature/feature-name
+pnpm run build
+```
+
+### **Production Deployment Pattern**
+```powershell
+# Production deployment
+git checkout main
+git merge develop
+pnpm run build
+
+# PM2 restart production service
+pm2 restart strangematic-prod
+```
+
+### **Hotfix Emergency Workflow**
+```powershell
+# Emergency production fix
+git checkout main
+git checkout -b hotfix/issue-description
+
+# Fix và test
+git add .
+git commit -m "fix: urgent issue description"
+
+# Deploy to production
+git checkout main
+git merge hotfix/issue-description
+pnpm run build
+pm2 restart strangematic-prod
+
+# Merge back to develop
+git checkout develop
+git merge hotfix/issue-description
+```
+
+## PM2 Multi-Environment Configuration
+
+### **Production Service**
+```javascript
+// C:\automation\environments\ecosystem.production.config.js
+module.exports = {
+  apps: [{
+    name: 'strangematic-prod',
+    script: '../n8n/packages/cli/bin/n8n',
+    cwd: 'C:/automation/n8n',
+    env: { NODE_ENV: 'production', N8N_PORT: 5678 },
+    max_memory_restart: '2G',
+    autorestart: true
+  }]
+};
+```
+
+### **Development Service**
+```javascript
+// C:\automation\environments\ecosystem.development.config.js
+module.exports = {
+  apps: [{
+    name: 'strangematic-dev',
+    script: '../n8n/packages/cli/bin/n8n',
+    cwd: 'C:/automation/n8n',
+    env: { NODE_ENV: 'development', N8N_PORT: 5679 },
+    max_memory_restart: '1G',
+    watch: true
+  }]
+};
+```
+
+## AI Agent Automation Scripts
+
+### **Environment Switching**
+```powershell
+# Production deployment script
+# C:\automation\scripts\deploy-production.ps1
+cd C:\automation\n8n
+git checkout main
+git pull strangematic main
+pnpm run build
+pm2 reload strangematic-prod
+
+# Development switching script
+# C:\automation\scripts\switch-development.ps1
+cd C:\automation\n8n
+git checkout develop
+git pull strangematic develop
+pnpm run build
+pm2 reload strangematic-dev
+```
+
+## Branch Protection Rules
+
+### **Main Branch (Production)**
+```yaml
+Protection:
+  - No direct commits allowed
+  - Require pull request reviews
+  - Require status checks to pass
+  - Require up-to-date branches
+  - Auto-deployment on merge
+```
+
+### **Develop Branch (Integration)**
+```yaml
+Usage:
+  - Integration testing ground
+  - Base cho new features
+  - Merged từ feature branches
+  - Source cho production deployments
+```
+
+## Storage Optimization Benefits
+
+```yaml
+Single Repository Approach:
+✅ Save 1.6GB+ storage (Dell OptiPlex 3060 limited to 636GB)
+✅ Unified Git history và easier tracking
+✅ Simplified dependency management
+✅ Faster branch switching
+✅ Single node_modules folder
+✅ Consistent build artifacts
+
+Avoid Multiple Folders:
+❌ Storage waste: ~1GB+ per clone
+❌ Sync complexity between repositories
+❌ Build confusion với multiple node_modules
+❌ Manual copying risks
+❌ Fragmented Git history
+```
+
+## Error Prevention Patterns
+
+### **Common Mistakes to Avoid**
+```yaml
+❌ Never commit directly to main branch
+❌ Never develop on main branch
+❌ Never skip testing before merge to develop
+❌ Never deploy without proper build
+❌ Never ignore database migration impacts
+```
+
+### **Required Checks Before Deployment**
+```yaml
+✅ Git status clean (no uncommitted changes)
+✅ Build successful: pnpm run build
+✅ Database migrations applied
+✅ Environment variables updated
+✅ PM2 service health check
+✅ Cloudflare Tunnel operational
+```
+
+## Quick Reference Commands
+
+```powershell
+# Status checks
+git status
+git branch -a
+pm2 status
+
+# Environment switching
+git checkout main     # Production code
+git checkout develop  # Development code
+
+# Service management
+pm2 start C:\automation\environments\ecosystem.production.config.js
+pm2 start C:\automation\environments\ecosystem.development.config.js
+
+# Build và deploy
+pnpm run build
+pm2 restart strangematic-prod
+```
+
+---
+
+*Git Workflow Strategy optimized cho Dell OptiPlex 3060 constraints với enterprise-grade development practices cho strangematic.com automation hub*
