@@ -1,0 +1,69 @@
+# =================================================================
+# n8n Development Environment Configuration
+# Copy file này thành .env.development và điều chỉnh values
+# =================================================================
+
+# Domain Configuration - Local Development
+DOMAIN_NAME=localhost
+N8N_EDITOR_BASE_URL=http://localhost:5679
+WEBHOOK_URL=http://localhost:5679
+N8N_HOST=localhost
+N8N_PROTOCOL=http
+N8N_PORT=5679
+
+# Database Configuration - Development
+DB_TYPE=postgresdb
+DB_POSTGRESDB_HOST=localhost
+DB_POSTGRESDB_PORT=5432
+DB_POSTGRESDB_DATABASE=strangematic_n8n_dev
+DB_POSTGRESDB_USER=strangematic_user
+DB_POSTGRESDB_PASSWORD=CHANGE_THIS_DEV_PASSWORD
+
+# Security Configuration (Relaxed for Development)
+N8N_SECURE_COOKIE=false
+N8N_JWT_SECRET=CHANGE_THIS_DEV_JWT_SECRET
+N8N_ENCRYPTION_KEY=CHANGE_THIS_DEV_ENCRYPTION_KEY
+
+# Performance Configuration - Conservative for Development
+N8N_EXECUTIONS_TIMEOUT=1800
+N8N_EXECUTIONS_TIMEOUT_MAX=3600
+N8N_EXECUTIONS_DATA_SAVE_ON_ERROR=all
+N8N_EXECUTIONS_DATA_SAVE_ON_SUCCESS=none
+N8N_DEFAULT_BINARY_DATA_MODE=filesystem
+
+# Node.js Performance Tuning
+NODE_ENV=development
+NODE_OPTIONS=--max-old-space-size=4096
+
+# Logging Configuration
+N8N_LOG_LEVEL=debug
+N8N_LOG_OUTPUT=console
+
+# User Management (Disabled for easier development)
+N8N_USER_MANAGEMENT_DISABLED=true
+
+# API Configuration - Development với reduced costs
+API_OPTIMIZATION_MODE=development
+
+# YEScale Configuration (Primary cho development)
+YESCALE_BASE_URL=https://yescale.bogia.app
+YESCALE_API_KEY=CHANGE_THIS_YESCALE_DEV_KEY
+YESCALE_ENABLE_FALLBACK=false
+
+# Development APIs (Limited usage)
+OPENAI_API_KEY=CHANGE_THIS_DEV_OPENAI_KEY
+CLAUDE_API_KEY=CHANGE_THIS_DEV_CLAUDE_KEY
+GOOGLE_AI_KEY=CHANGE_THIS_DEV_GOOGLE_KEY
+
+# Cost Control Settings (Stricter for development)
+MAX_DAILY_COST_USD=10
+MAX_WORKFLOW_COST_USD=1
+COST_ALERT_WEBHOOK=http://localhost:5679/webhook/dev-cost-alert
+
+# Storage Configuration
+N8N_USER_FOLDER=C:/n8n-dev-data
+N8N_BINARY_DATA_TTL=24
+
+# Development Features
+N8N_DIAGNOSTICS_ENABLED=true
+N8N_VERSION_NOTIFICATIONS_ENABLED=false

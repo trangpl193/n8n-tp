@@ -1,0 +1,67 @@
+# =================================================================
+# n8n Production Environment Configuration - strangematic.com
+# Copy file này thành .env.production và điều chỉnh values
+# =================================================================
+
+# Domain Configuration - strangematic.com Production Hub
+DOMAIN_NAME=strangematic.com
+N8N_EDITOR_BASE_URL=https://app.strangematic.com
+WEBHOOK_URL=https://api.strangematic.com
+N8N_HOST=app.strangematic.com
+N8N_PROTOCOL=https
+N8N_PORT=5678
+
+# Database Configuration - Production
+DB_TYPE=postgresdb
+DB_POSTGRESDB_HOST=localhost
+DB_POSTGRESDB_PORT=5432
+DB_POSTGRESDB_DATABASE=strangematic_n8n_prod
+DB_POSTGRESDB_USER=strangematic_user
+DB_POSTGRESDB_PASSWORD=CHANGE_THIS_PRODUCTION_PASSWORD
+
+# Security Configuration
+N8N_SECURE_COOKIE=true
+N8N_JWT_SECRET=CHANGE_THIS_JWT_SECRET_256_CHARS_MIN
+N8N_ENCRYPTION_KEY=CHANGE_THIS_ENCRYPTION_KEY
+
+# Performance Configuration - Dell OptiPlex 3060 Optimized
+N8N_EXECUTIONS_TIMEOUT=3600
+N8N_EXECUTIONS_TIMEOUT_MAX=7200
+N8N_EXECUTIONS_DATA_SAVE_ON_ERROR=all
+N8N_EXECUTIONS_DATA_SAVE_ON_SUCCESS=all
+N8N_DEFAULT_BINARY_DATA_MODE=filesystem
+
+# Node.js Performance Tuning
+NODE_ENV=production
+NODE_OPTIONS=--max-old-space-size=8192
+
+# Logging Configuration
+N8N_LOG_LEVEL=info
+N8N_LOG_OUTPUT=file
+N8N_LOG_FILE_LOCATION=./logs/
+
+# User Management
+N8N_USER_MANAGEMENT_DISABLED=true
+
+# API Configuration với YEScale + Fallbacks
+API_OPTIMIZATION_MODE=hybrid
+
+# YEScale Configuration (Primary - 40-80% savings)
+YESCALE_BASE_URL=https://yescale.bogia.app
+YESCALE_API_KEY=CHANGE_THIS_YESCALE_KEY
+YESCALE_ENABLE_FALLBACK=true
+YESCALE_QUOTA_THRESHOLD=1000000
+
+# Fallback APIs (Premium features)
+OPENAI_API_KEY=CHANGE_THIS_OPENAI_KEY
+CLAUDE_API_KEY=CHANGE_THIS_CLAUDE_KEY
+GOOGLE_AI_KEY=CHANGE_THIS_GOOGLE_KEY
+
+# Cost Control Settings
+MAX_DAILY_COST_USD=50
+MAX_WORKFLOW_COST_USD=5
+COST_ALERT_WEBHOOK=https://api.strangematic.com/webhook/cost-alert
+
+# Storage Configuration
+N8N_USER_FOLDER=C:/n8n-data
+N8N_BINARY_DATA_TTL=168
