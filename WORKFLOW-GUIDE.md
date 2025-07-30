@@ -190,7 +190,7 @@ pm2 monit
 # Primary role: Feature development và testing
 DOMAIN: localhost
 PORT: 5679 (development)
-DATABASE: strangematic_n8n_dev  
+DATABASE: strangematic_n8n_dev
 RESOURCES: Conservative allocation
 ```
 
