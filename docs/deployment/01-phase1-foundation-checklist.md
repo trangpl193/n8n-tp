@@ -119,12 +119,19 @@ Core Runtime Environment:
   - AI Command: winget install Git.Git
 
 Database System:
-□ PostgreSQL 15.4: https://www.postgresql.org/download/windows/
-  - Installation: Windows service với auto-start
-  - Configuration: Port 5432, locale English_United States
-  - Location: C:\PostgreSQL\15\
-  - AI Command: Manual installer với secure password setup
-  - Security: Create dedicated user 'strangematic_user'
+✅ PostgreSQL 17.5: https://www.postgresql.org/download/windows/
+  - Installation: Windows service với auto-start ✅ COMPLETED
+  - Service: postgresql-x64-17 RUNNING ✅
+  - Configuration: Port 5432, locale English_United States ✅
+  - Location: C:\Program Files\PostgreSQL\17\ ✅
+  - Status: Manual installation completed successfully
+  - Security: Create dedicated user 'strangematic_user' ⏳ IN PROGRESS
+  
+  🔧 PostgreSQL Password Setup (Required):
+  - Installation Note: Một số installer không có password field
+  - Default Status: postgres user có thể không có password
+  - Solution: Set password sau installation bằng psql hoặc pgAdmin
+  - Commands: Xem troubleshooting section below
 
 Process Management:
 □ PM2 5.3.0 Global: npm install -g pm2 pm2-windows-service
@@ -148,13 +155,7 @@ Code Editor & Tools:
   - Purpose: n8n web interface access và development
   - AI Command: winget install Google.Chrome
 
-System Utilities:
-□ 7-Zip 23.01: https://www.7-zip.org/download.html
-  - Installation: System utility cho archive management
-  - AI Command: winget install 7zip.7zip
-
-□ PowerShell 7.3+: https://github.com/PowerShell/PowerShell/releases
-  - Installation: Side-by-side với Windows PowerShell
+on: Side-by-side với Windows PowerShell
   - AI Command: winget install Microsoft.PowerShell
 
 □ CPU-Z 2.06: https://www.cpuid.com/softwares/cpu-z.html
@@ -261,13 +262,17 @@ Resource Monitoring:
 node --version          # Should return v18.18.2+
 npm --version           # Should return 9.8.1+
 git --version           # Should return 2.42.0+
-psql --version          # Should return 15.4+
+& "C:\Program Files\PostgreSQL\17\bin\psql.exe" --version  # Should return 17.5+
 pm2 --version           # Should return 5.3.0+
 
 # Service Status Verification
 Get-Service postgresql* # Should show "Running"
 Get-Service PM2         # Should show "Running"
 pm2 status              # Should show empty process list initially
+
+# PostgreSQL Connection Verification
+& "C:\Program Files\PostgreSQL\17\bin\psql.exe" -U postgres -h localhost -p 5432 -c "SELECT version();"
+# Should prompt for password và return PostgreSQL version
 
 # Network Tools Verification
 cloudflared version     # Should show current version
@@ -276,6 +281,10 @@ Test-Path "C:\automation\remote-access\UltraViewer.exe" # Should return True
 # Project Dependencies Verification
 Test-Path "C:\automation\n8n\package.json"             # Should return True
 Test-Path "C:\automation\n8n\.env.production"          # Should return True
+
+# Database Setup Verification (After password setup)
+& "C:\Program Files\PostgreSQL\17\bin\psql.exe" -U postgres -h localhost -p 5432 -c "\l"
+# Should list databases including strangematic_n8n (after setup)
 ```
 
 **🔍 Dell OptiPlex 3060 Driver Installation:**
@@ -629,14 +638,31 @@ npm run build
 **🗄️ Database Configuration:**
 ```sql
 -- PostgreSQL database setup
+-- IMPORTANT: Ensure postgres user has password first!
+-- If not set, see "PostgreSQL Password Setup Issues" in troubleshooting section
+
 -- Connect to PostgreSQL as postgres user
+-- Method 1: Command line
+-- cd "C:\Program Files\PostgreSQL\17\bin"
+-- psql -U postgres -h localhost -p 5432
+
+-- Method 2: Use script file
+-- psql -U postgres -h localhost -p 5432 -f database-setup.sql
 
 CREATE DATABASE strangematic_n8n;
-CREATE USER strangematic_user WITH PASSWORD 'secure_password_here';
+CREATE USER strangematic_user WITH PASSWORD 'strangematic_2024_secure!';
 GRANT ALL PRIVILEGES ON DATABASE strangematic_n8n TO strangematic_user;
+ALTER USER strangematic_user CREATEDB;
 
--- Test connection
-\c strangematic_n8n strangematic_user
+-- Connect to new database và grant schema privileges
+\c strangematic_n8n;
+GRANT ALL ON SCHEMA public TO strangematic_user;
+GRANT ALL ON ALL TABLES IN SCHEMA public TO strangematic_user;
+GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO strangematic_user;
+
+-- Verify setup
+\l
+\du
 ```
 
 **⚙️ Environment Configuration:**
@@ -852,6 +878,34 @@ Solution:
   4. Restart tunnel service: net restart cloudflared
 ```
 
+### **🚨 PostgreSQL Password Setup Issues:**
+```yaml
+Problem: PostgreSQL installer không có password field hoặc postgres user không có password
+Solution:
+  1. Method 1 - psql command line:
+     # Open Command Prompt as Administrator
+     cd "C:\Program Files\PostgreSQL\17\bin"
+     psql -U postgres
+     # Nếu connect thành công without password:
+     ALTER USER postgres PASSWORD 'your_secure_password_here';
+     \q
+     
+  2. Method 2 - pgAdmin GUI:
+     # Mở pgAdmin 4 từ Start Menu
+     # Connect to PostgreSQL server (có thể không cần password)
+     # Right-click postgres user → Properties → Definition
+     # Set Password: your_secure_password_here
+     
+  3. Method 3 - Windows Authentication (if enabled):
+     # PostgreSQL có thể sử dụng Windows authentication
+     # Check pg_hba.conf file trong C:\Program Files\PostgreSQL\17\data\
+     # Look for "trust" authentication method
+     
+  4. Verification:
+     psql -U postgres -h localhost -p 5432
+     # Should prompt for password và connect successfully
+```
+
 ### **🚨 n8n Database Connection:**
 ```yaml
 Problem: n8n cannot connect to PostgreSQL
@@ -860,6 +914,7 @@ Solution:
   2. Check database credentials in .env.production
   3. Test connection manually với psql
   4. Review PostgreSQL logs for authentication errors
+  5. Ensure postgres user has password set (see above section)
 ```
 
 ### **🚨 Remote Access Problems:**
@@ -895,3 +950,4 @@ Solution:
 
 **Estimated Completion:** 15 ngày (bao gồm Day 0 Windows installation)
 **Success Criteria:** >98% uptime, <3s response times, full remote accessibility, complete Windows setup
+
