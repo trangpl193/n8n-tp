@@ -100,30 +100,182 @@ Critical Settings:
 □ Regional Format: Vietnamese (or your preference)
 ```
 
-**📦 Essential Software Installation:**
+**📦 AI-to-AI Dependencies Installation Strategy:**
+
+## **🎯 PRIORITY 1: SYSTEM DEPENDENCIES (AI Agent Install Order)**
+
 ```yaml
-Development Tools:
-□ Google Chrome: https://www.google.com/chrome/
-□ Visual Studio Code: https://code.visualstudio.com/
-□ Git for Windows: https://git-scm.com/download/win
-□ Node.js LTS: https://nodejs.org/en/download/
-□ 7-Zip: https://www.7-zip.org/download.html
+Core Runtime Environment:
+□ Node.js LTS 18.18.2: https://nodejs.org/en/download/
+  - Installation: Global system với PATH environment
+  - Verification: node --version && npm --version
+  - Location: C:\Program Files\nodejs\
+  - AI Command: winget install OpenJS.NodeJS.LTS
+
+□ Git for Windows 2.42.0+: https://git-scm.com/download/win
+  - Installation: System-wide với credential manager
+  - Configuration: git config --global core.autocrlf true
+  - Location: C:\Program Files\Git\
+  - AI Command: winget install Git.Git
+
+Database System:
+□ PostgreSQL 15.4: https://www.postgresql.org/download/windows/
+  - Installation: Windows service với auto-start
+  - Configuration: Port 5432, locale English_United States
+  - Location: C:\PostgreSQL\15\
+  - AI Command: Manual installer với secure password setup
+  - Security: Create dedicated user 'strangematic_user'
+
+Process Management:
+□ PM2 5.3.0 Global: npm install -g pm2 pm2-windows-service
+  - Installation: Global npm package với Windows service
+  - Configuration: pm2-service-install command
+  - Service Name: PM2
+  - AI Command: Automated post Node.js installation
+```
+
+## **🎯 PRIORITY 2: DEVELOPMENT TOOLS (AI Agent Install Order)**
+
+```yaml
+Code Editor & Tools:
+□ Visual Studio Code 1.83+: https://code.visualstudio.com/
+  - Installation: User installer với extensions support
+  - Extensions: TypeScript, ESLint, GitLens, n8n workflow
+  - AI Command: winget install Microsoft.VisualStudioCode
+
+□ Google Chrome Latest: https://www.google.com/chrome/
+  - Installation: System installer cho browser testing
+  - Purpose: n8n web interface access và development
+  - AI Command: winget install Google.Chrome
 
 System Utilities:
-□ UltraViewer: https://www.ultraviewer.net/en/download
-□ PowerShell 7: https://github.com/PowerShell/PowerShell/releases
-□ Windows Terminal: Microsoft Store (optional)
-□ CPU-Z: https://www.cpuid.com/softwares/cpu-z.html (hardware info)
+□ 7-Zip 23.01: https://www.7-zip.org/download.html
+  - Installation: System utility cho archive management
+  - AI Command: winget install 7zip.7zip
 
-Database & Runtime:
-□ PostgreSQL 14+: https://www.postgresql.org/download/windows/
-□ pgAdmin 4: Included với PostgreSQL installation
-□ Microsoft Visual C++ Redistributables: Auto-installed with other software
+□ PowerShell 7.3+: https://github.com/PowerShell/PowerShell/releases
+  - Installation: Side-by-side với Windows PowerShell
+  - AI Command: winget install Microsoft.PowerShell
 
-Network & Security:
-□ Cloudflared: https://github.com/cloudflare/cloudflared/releases
-□ Windows Firewall: Already included
-□ Windows Defender: Already included
+□ CPU-Z 2.06: https://www.cpuid.com/softwares/cpu-z.html
+  - Installation: Hardware monitoring tool
+  - Purpose: Dell OptiPlex 3060 resource monitoring
+  - AI Command: winget install CPUID.CPU-Z
+```
+
+## **🎯 PRIORITY 3: NETWORK & SECURITY (AI Agent Install Order)**
+
+```yaml
+Tunnel & Remote Access:
+□ Cloudflared Latest: https://github.com/cloudflare/cloudflared/releases
+  - Installation: Manual download cloudflared-windows-amd64.exe
+  - Location: C:\cloudflared\cloudflared.exe
+  - Configuration: Windows service với tunnel config
+  - AI Command: Direct download + service installation
+
+□ UltraViewer Latest: https://www.ultraviewer.net/en/download
+  - Installation: Portable executable (no installer)
+  - Location: C:\automation\remote-access\UltraViewer.exe
+  - Configuration: Auto-start với Windows, secure password
+  - AI Command: Direct download + startup configuration
+
+Security Components:
+□ Windows Defender: Built-in (configuration only)
+  - Configuration: Real-time protection enabled
+  - Exclusions: Add C:\automation\ folder
+  - AI Command: PowerShell configuration scripts
+
+□ Windows Firewall: Built-in (rule configuration)
+  - Rules: Allow ports 5678, 8080, 3389
+  - Profile: Private network configuration
+  - AI Command: netsh firewall configuration
+```
+
+## **🎯 PRIORITY 4: PROJECT DEPENDENCIES (AI Agent Install Order)**
+
+```yaml
+Source Code Deployment:
+□ n8n Source Repository: https://github.com/n8n-io/n8n.git
+  - Location: C:\automation\n8n\
+  - Installation: git clone + npm install
+  - Build: npm run build (production ready)
+  - AI Command: Automated git clone + dependency installation
+
+Database Configuration:
+□ PostgreSQL Database: strangematic_n8n
+  - Database: CREATE DATABASE strangematic_n8n
+  - User: strangematic_user với full privileges
+  - Connection: localhost:5432 với SSL preferred
+  - AI Command: SQL scripts execution
+
+Environment Setup:
+□ Production Environment: .env.production file
+  - Configuration: Domain, database, API keys
+  - Location: C:\automation\n8n\.env.production
+  - Security: Encrypted credential storage
+  - AI Command: Template-based generation
+
+PM2 Ecosystem:
+□ Application Service: ecosystem.config.js
+  - Configuration: Production service với auto-restart
+  - Logging: Structured logs với rotation
+  - Monitoring: Memory limits và health checks
+  - AI Command: Service configuration + startup
+```
+
+## **🎯 AI AGENT EXECUTION PRIORITIES**
+
+```yaml
+Installation Sequence:
+1. PRIORITY 1: Core runtime (Node.js, Git, PostgreSQL, PM2)
+   - Dependency chain: Node.js → PM2 global installation
+   - Database setup: PostgreSQL service + user creation
+   - Time estimate: 30-45 minutes
+
+2. PRIORITY 2: Development tools (VSCode, Chrome, utilities)
+   - Independent installations, can run parallel
+   - Configuration: Extensions + settings
+   - Time estimate: 15-20 minutes
+
+3. PRIORITY 3: Network tools (Cloudflared, UltraViewer)
+   - Manual downloads + service configuration
+   - Security setup: Tunnel authentication
+   - Time estimate: 20-30 minutes
+
+4. PRIORITY 4: Project deployment (n8n source, database, services)
+   - Source code: Clone + build + configuration
+   - Service setup: PM2 ecosystem + auto-start
+   - Time estimate: 45-60 minutes
+
+Resource Monitoring:
+- CPU usage: Monitor during npm install (can spike to 80%+)
+- Memory usage: Track PostgreSQL + Node.js processes
+- Disk space: Verify 50GB+ available cho dependencies
+- Network: Stable connection cho large downloads (n8n source ~500MB)
+```
+
+## **🔧 AI VERIFICATION COMMANDS**
+
+```powershell
+# System Dependencies Verification
+node --version          # Should return v18.18.2+
+npm --version           # Should return 9.8.1+
+git --version           # Should return 2.42.0+
+psql --version          # Should return 15.4+
+pm2 --version           # Should return 5.3.0+
+
+# Service Status Verification
+Get-Service postgresql* # Should show "Running"
+Get-Service PM2         # Should show "Running"
+pm2 status              # Should show empty process list initially
+
+# Network Tools Verification
+cloudflared version     # Should show current version
+Test-Path "C:\automation\remote-access\UltraViewer.exe" # Should return True
+
+# Project Dependencies Verification
+Test-Path "C:\automation\n8n\package.json"             # Should return True
+Test-Path "C:\automation\n8n\.env.production"          # Should return True
 ```
 
 **🔍 Dell OptiPlex 3060 Driver Installation:**
