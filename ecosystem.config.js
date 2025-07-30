@@ -6,7 +6,7 @@ module.exports = {
 		{
 			name: 'strangematic-hub',
 			script: 'node',
-			args: 'packages/cli/bin/n8n',
+			args: ['./packages/cli/bin/n8n'],
 			cwd: 'C:/Github/n8n-tp',
 
 			// Environment Configuration

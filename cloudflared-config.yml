@@ -1,0 +1,13 @@
+tunnel: automation-hub-prod
+credentials-file: C:\Users\phaml\.cloudflared\58d98946-68c4-4127-9dab-cb531f3ca47a.json
+
+ingress:
+  - hostname: app.strangematic.com
+    service: http://localhost:5678
+  - hostname: api.strangematic.com
+    service: http://localhost:5678
+    originRequest:
+      httpHostHeader: api.strangematic.com
+  - hostname: status.strangematic.com
+    service: http://localhost:8080
+  - service: http_status:404
