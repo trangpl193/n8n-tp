@@ -24,7 +24,7 @@ module.exports = {
 				DB_POSTGRESDB_PORT: 5432,
 				DB_POSTGRESDB_DATABASE: 'strangematic_n8n',
 				DB_POSTGRESDB_USER: 'strangematic_user',
-				DB_POSTGRESDB_PASSWORD: 'strangematic_2024_secure!',
+				DB_POSTGRESDB_PASSWORD: 'postgres123',
 
 				// Security
 				N8N_SECURE_COOKIE: 'true',
