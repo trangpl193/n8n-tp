@@ -1,0 +1,288 @@
+---
+description: "ALWAYS REFERENCE - Central variable definitions for all AI Agent rules and documentation. Use ${VAR_NAME} syntax to reference these values."
+globs: ["**/*"]
+alwaysApply: true
+priority: 1
+---
+
+# 🔧 SYSTEM VARIABLES - Central Configuration
+
+## 📋 USAGE INSTRUCTIONS FOR AI AGENT
+
+### **Variable Reference Syntax:**
+```
+${HARDWARE_CPU_CORES}     # Use this syntax in rules
+${STORAGE_PRIMARY_SIZE}   # AI Agent will resolve automatically
+${DOMAIN_PRIMARY}         # Consistent across all contexts
+```
+
+### **Update Protocol:**
+1. **ONLY UPDATE THIS FILE** when specifications change
+2. All other rules will inherit automatically
+3. AI Agent will validate consistency across references
+4. Version control tracks all changes centrally
+
+---
+
+## 🖥️ HARDWARE CONFIGURATION VARIABLES
+
+```yaml
+# === SYSTEM SPECIFICATIONS ===
+SYSTEM_HOSTNAME: "WINDOWS-PC"
+SYSTEM_MODEL: "Dell OptiPlex 3060"
+SYSTEM_OS: "Microsoft Windows 11 Pro (Build 22631)"
+
+# === CPU SPECIFICATIONS ===
+HARDWARE_CPU_MODEL: "Intel Core i5-8500T"
+HARDWARE_CPU_CORES: 6
+HARDWARE_CPU_THREADS: 6
+HARDWARE_CPU_FREQUENCY: "2.1GHz"
+HARDWARE_CPU_SERIES: "Coffee Lake 8th gen, T-series (low power)"
+
+# === MEMORY SPECIFICATIONS ===
+HARDWARE_RAM_TOTAL: "16GB"
+HARDWARE_RAM_TYPE: "DDR4"
+HARDWARE_RAM_ALLOCATED_N8N: "8-12GB"
+HARDWARE_RAM_RESERVED_SYSTEM: "4GB+"
+
+# === STORAGE SPECIFICATIONS ===
+STORAGE_PRIMARY_SIZE: "512GB"
+STORAGE_PRIMARY_DRIVE: "C:"
+STORAGE_PRIMARY_TYPE: "NVMe SSD"
+STORAGE_PRIMARY_FREE: "417GB"
+
+STORAGE_SECONDARY_SIZE: "124GB"
+STORAGE_SECONDARY_DRIVE: "E:"
+STORAGE_SECONDARY_TYPE: "SATA"
+STORAGE_SECONDARY_FREE: "121GB"
+
+STORAGE_EXTENDED_SIZE: "250GB"
+STORAGE_EXTENDED_TYPE: "SATA SSD"
+STORAGE_EXTENDED_PURPOSE: "Large files + processing"
+
+STORAGE_TOTAL_AVAILABLE: "636GB"
+
+# === NETWORK SPECIFICATIONS ===
+HARDWARE_NETWORK_WIFI: "Intel Wireless-AC 9560 160MHz (751 Mbps)"
+HARDWARE_NETWORK_ETHERNET: "Direct router connection"
+HARDWARE_GPU: "Intel UHD Graphics 630 (1GB VRAM)"
+```
+
+---
+
+## 🌐 DOMAIN & NETWORK VARIABLES
+
+```yaml
+# === DOMAIN CONFIGURATION ===
+DOMAIN_PRIMARY: "strangematic.com"
+DOMAIN_REGISTRAR: "Cloudflare Registrar"
+DOMAIN_COST_ANNUAL: "$10"
+DOMAIN_MANAGEMENT: "Cloudflare DNS"
+
+# === SUBDOMAIN STRUCTURE ===
+SUBDOMAIN_APP: "app.strangematic.com"
+SUBDOMAIN_API: "api.strangematic.com"
+SUBDOMAIN_STATUS: "status.strangematic.com"
+SUBDOMAIN_DOCS: "docs.strangematic.com"
+
+# === CLOUDFLARE TUNNEL ===
+TUNNEL_NAME: "automation-hub-prod"
+TUNNEL_UUID: "58d98946-68c4-4127-9dab-cb531f3ca47a"
+TUNNEL_CONFIG_PATH: "C:\\cloudflared\\config.yml"
+TUNNEL_CREDENTIALS_PATH: "C:\\cloudflared\\cert.pem"
+
+# === APPLICATION PORTS ===
+PORT_N8N_MAIN: 5678
+PORT_N8N_INTERNAL: "localhost:5678"
+PORT_STATUS_MONITOR: 8080
+PORT_STATUS_INTERNAL: "localhost:8080"
+PORT_HTTPS: 443
+PORT_HTTP: 80
+```
+
+---
+
+## 💾 DATABASE & STORAGE VARIABLES
+
+```yaml
+# === POSTGRESQL CONFIGURATION ===
+DATABASE_VERSION: "PostgreSQL 17.5"
+DATABASE_NAME: "strangematic_n8n"
+DATABASE_USER: "strangematic_user"
+DATABASE_HOST: "localhost"
+DATABASE_PORT: 5432
+DATABASE_PASSWORD_ENV: "DB_POSTGRESDB_PASSWORD"
+
+# === APPLICATION STORAGE PATHS ===
+PATH_N8N_DATA: "C:/n8n-data/"
+PATH_N8N_SOURCE: "C:/Github/n8n-tp"
+PATH_CLOUDFLARED: "C:/cloudflared/"
+PATH_AUTOMATION_DATA: "E:/automation-data/"
+PATH_LOGS: "C:/Github/n8n-tp/logs/"
+
+# === SSD STORAGE ALLOCATION ===
+SSD_FIGMA_FILES: "50GB"
+SSD_PROCESSING_WORKSPACE: "40GB"
+SSD_GENERATED_CONTENT: "40GB"
+SSD_ARCHIVE_BACKUP: "70GB"
+SSD_SYSTEM_RESERVE: "50GB"
+```
+
+---
+
+## ⚡ PERFORMANCE & RESOURCE VARIABLES
+
+```yaml
+# === CPU ALLOCATION ===
+CPU_CORES_N8N_MAX: 4
+CPU_CORES_SYSTEM_RESERVED: 2
+CPU_USAGE_INTENSIVE_MAX: "60-80%"
+
+# === MEMORY ALLOCATION ===
+MEMORY_N8N_WORKFLOWS: "8-12GB"
+MEMORY_SYSTEM_APPS: "4GB"
+MEMORY_PROCESSING_PEAK: "4-6GB"
+MEMORY_CACHE_LAYER: "2GB"
+MEMORY_WARNING_THRESHOLD: "12GB"
+MEMORY_CRITICAL_THRESHOLD: "14GB"
+
+# === PERFORMANCE TARGETS ===
+PERFORMANCE_FIGMA_JSON_200MB: "3-5 seconds"
+PERFORMANCE_FIGMA_JSON_300MB: "5-8 seconds"
+PERFORMANCE_DATABASE_QUERY: "<500ms"
+PERFORMANCE_CACHE_HIT_RATIO: ">80%"
+PERFORMANCE_PAGE_LOAD: "<2s"
+PERFORMANCE_GLOBAL_RESPONSE: "<200ms"
+
+# === WORKFLOW CAPACITIES ===
+WORKFLOW_PROFESSIONAL_CONCURRENT: "20-50"
+WORKFLOW_MEDIUM_CONCURRENT: "10-25"
+WORKFLOW_COMPLEX_CONCURRENT: "5-15"
+WORKFLOW_INTENSIVE_CONCURRENT: "2-8"
+```
+
+---
+
+## 🔐 SECURITY & ACCESS VARIABLES
+
+```yaml
+# === SSL/TLS CONFIGURATION ===
+SSL_MODE: "Full Strict"
+SSL_GRADE_TARGET: "A+"
+SSL_PROVIDER: "Cloudflare"
+
+# === AUTHENTICATION ===
+AUTH_METHOD: "n8n user management"
+AUTH_JWT_SECRET_ENV: "N8N_JWT_SECRET"
+AUTH_ENCRYPTION_KEY_ENV: "N8N_ENCRYPTION_KEY"
+
+# === SECURITY FEATURES ===
+SECURITY_DDOS_PROTECTION: "Enterprise-grade via Cloudflare Edge"
+SECURITY_WAF: "OWASP Top 10 + custom rules"
+SECURITY_TUNNEL_TYPE: "Cloudflare Tunnel (zero port forwarding)"
+
+# === ACCESS CONTROL ===
+ACCESS_REMOTE_TOOL: "UltraViewer"
+ACCESS_BACKUP_METHOD: "RDP (Port 3389)"
+ACCESS_ADMIN_ONLY: true
+ACCESS_PUBLIC_REGISTRATION: false
+```
+
+---
+
+## 📊 CLOUD & BACKUP VARIABLES
+
+```yaml
+# === GOOGLE DRIVE CONFIGURATION ===
+CLOUD_DRIVE_ACCOUNT_LIMIT: "15GB"
+CLOUD_DRIVE_TOTAL_ACCOUNTS: 3
+CLOUD_DRIVE_TOTAL_CAPACITY: "45GB"
+CLOUD_DRIVE_PRIMARY: "automation@domain.com"
+CLOUD_DRIVE_BACKUP: "automation-backup@domain.com"
+CLOUD_DRIVE_SHARING: "automation-share@domain.com"
+
+# === COMPRESSION SETTINGS ===
+COMPRESSION_JSON_REDUCTION: "70%"
+COMPRESSION_IMAGE_REDUCTION: "50%"
+COMPRESSION_BULK_REDUCTION: "60-70%"
+
+# === BACKUP STRATEGY ===
+BACKUP_FREQUENCY_CRITICAL: "Immediate"
+BACKUP_FREQUENCY_ACTIVE: "Hourly"
+BACKUP_FREQUENCY_LARGE: "Daily (compressed)"
+BACKUP_FREQUENCY_ARCHIVE: "Manual"
+```
+
+---
+
+## 🎯 DEPLOYMENT & ENVIRONMENT VARIABLES
+
+```yaml
+# === ENVIRONMENT CONFIGURATION ===
+NODE_ENV: "production"
+N8N_EDITOR_BASE_URL: "https://${SUBDOMAIN_APP}"
+WEBHOOK_URL: "https://${SUBDOMAIN_API}"
+N8N_HOST: "${SUBDOMAIN_APP}"
+N8N_PROTOCOL: "https"
+N8N_PORT: "${PORT_N8N_MAIN}"
+
+# === DEPLOYMENT PATHS ===
+DEPLOYMENT_METHOD: "n8n source code"
+DEPLOYMENT_PROCESS_MANAGER: "PM2"
+DEPLOYMENT_SERVICE_NAME: "strangematic-hub"
+DEPLOYMENT_AUTO_RESTART: true
+DEPLOYMENT_MEMORY_LIMIT: "2G"
+
+# === COST ANALYSIS ===
+COST_DOMAIN_ANNUAL: 10
+COST_INFRASTRUCTURE_ANNUAL: 180
+COST_UPS_SYSTEM_ONETIME: 80
+COST_TOTAL_5_YEAR: 1030
+ROI_PROJECTION_5_YEAR: "17,380%"
+VALUE_MONTHLY_AUTOMATION: 3000
+```
+
+---
+
+## 📋 AI AGENT INSTRUCTIONS
+
+### **Variable Usage Patterns:**
+```yaml
+✅ CORRECT Usage in Rules:
+"System has ${HARDWARE_RAM_TOTAL} ${HARDWARE_RAM_TYPE} RAM"
+"Primary domain is ${DOMAIN_PRIMARY} (${DOMAIN_COST_ANNUAL}/year)"
+"Database: ${DATABASE_VERSION} on ${DATABASE_HOST}:${DATABASE_PORT}"
+"Performance target: ${PERFORMANCE_DATABASE_QUERY} queries"
+
+❌ AVOID Hardcoding:
+"System has 16GB DDR4 RAM"  # Use variables instead
+"Domain costs $10/year"     # Use ${DOMAIN_COST_ANNUAL}
+```
+
+### **Validation Protocol:**
+```yaml
+Before Using Variables:
+1. ✅ Check this file first for available variables
+2. ✅ Use ${VAR_NAME} syntax consistently
+3. ✅ Validate logical combinations (e.g., storage allocation)
+4. ✅ Reference latest values from this centralized source
+
+When Adding New Variables:
+1. ✅ Add to appropriate section above
+2. ✅ Use descriptive, hierarchical naming
+3. ✅ Include units và context where needed
+4. ✅ Update related documentation references
+```
+
+### **AI Agent Context Priority:**
+```yaml
+Rule Processing Order:
+1. 🥇 THIS FILE (00-system-variables.mdc) - HIGHEST PRIORITY
+2. 🥈 Specific topic rules (hardware, deployment, etc.)
+3. 🥉 Documentation files (analysis/, docs/)
+4. 🔄 Always validate against this central config
+```
+
+---
+
+*Central variable definitions cho consistent AI Agent behavior across all strangematic.com automation hub documentation và rules.*

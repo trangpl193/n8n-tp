@@ -1,0 +1,97 @@
+---
+description: "USE WHEN referencing system specifications, configuring domain-based automation hub, or optimizing for Dell OptiPlex 3060 with strangematic.com deployment. UPDATED TO USE SYSTEM VARIABLES."
+globs: ["**/*", "docs/**/*", "packages/**/*", "**/config*", "**/setup*"]
+alwaysApply: true
+references: ["00-system-variables.mdc"]
+---
+
+# Hardware Configuration Rules cho ${SYSTEM_MODEL} với ${DOMAIN_PRIMARY} Domain
+
+## System Specifications - Production Setup (${DOMAIN_PRIMARY})
+- **Hostname**: ${SYSTEM_HOSTNAME}
+- **Computer Model**: ${SYSTEM_MODEL} (Business Desktop)
+- **OS**: ${SYSTEM_OS}
+- **CPU**: ${HARDWARE_CPU_MODEL} (${HARDWARE_CPU_CORES} cores, ${HARDWARE_CPU_THREADS} threads) @${HARDWARE_CPU_FREQUENCY} - ${HARDWARE_CPU_SERIES}
+- **RAM**: ${HARDWARE_RAM_TOTAL} ${HARDWARE_RAM_TYPE} - Adequate cho moderate workflows và multitasking
+- **Storage**:
+  - ${STORAGE_PRIMARY_SIZE} (${STORAGE_PRIMARY_DRIVE} drive) - System và applications (${STORAGE_PRIMARY_TYPE}, ${STORAGE_PRIMARY_FREE} free)
+  - ${STORAGE_SECONDARY_SIZE} (${STORAGE_SECONDARY_DRIVE} drive) - Secondary storage (${STORAGE_SECONDARY_TYPE}, ${STORAGE_SECONDARY_FREE} free)
+  - ${STORAGE_EXTENDED_SIZE} (Extended) - ${STORAGE_EXTENDED_PURPOSE} (${STORAGE_EXTENDED_TYPE})
+  - **Total available**: ~${STORAGE_TOTAL_AVAILABLE}
+- **GPU**: ${HARDWARE_GPU} - Integrated graphics only
+- **Network**: ${HARDWARE_NETWORK_WIFI} + ${HARDWARE_NETWORK_ETHERNET}
+- **Domain**: ${DOMAIN_PRIMARY} với Cloudflare Tunnel infrastructure
+- **Runtime**: Node.js, ${DATABASE_VERSION}, n8n source code deployment
+
+## Domain Infrastructure - ${DOMAIN_PRIMARY} Configuration
+- **Primary Domain**: ${DOMAIN_PRIMARY} (${DOMAIN_REGISTRAR}, ${DOMAIN_COST_ANNUAL}/year)
+- **Subdomain Structure**:
+  - ${SUBDOMAIN_APP} → n8n main interface (${PORT_N8N_INTERNAL})
+  - ${SUBDOMAIN_API} → Webhook endpoints (${PORT_N8N_INTERNAL}/webhook/*)
+  - ${SUBDOMAIN_STATUS} → System monitoring (${PORT_STATUS_INTERNAL})
+  - ${SUBDOMAIN_DOCS} → API documentation
+- **Network Security**: ${SECURITY_TUNNEL_TYPE}
+- **SSL/TLS**: ${SSL_MODE} mode (${SSL_GRADE_TARGET} grade)
+- **Performance**: Global CDN với 300+ edge locations
+
+## Resource Allocation Guidelines - Production Conservative
+- **CPU Usage**: Max ${CPU_CORES_N8N_MAX} cores cho n8n workflows (${CPU_CORES_SYSTEM_RESERVED} cores reserved cho OS và background tasks)
+- **RAM Allocation**: ${HARDWARE_RAM_ALLOCATED_N8N} cho n8n workflows (${HARDWARE_RAM_RESERVED_SYSTEM} available cho other applications)
+- **Primary Storage**: ${STORAGE_PRIMARY_DRIVE}${PATH_N8N_DATA} cho main database và workflows
+- **Secondary Storage**: ${STORAGE_SECONDARY_DRIVE} drive cho backups và temporary files khi cần
+- **Extended Storage**: ${STORAGE_EXTENDED_SIZE} ${STORAGE_EXTENDED_TYPE} cho ${STORAGE_EXTENDED_PURPOSE}
+- **Network Bandwidth**: ${HARDWARE_NETWORK_ETHERNET} + ${HARDWARE_NETWORK_WIFI} sufficient cho professional automation
+
+## Performance Capacities - ${DOMAIN_PRIMARY} Automation Hub
+- **Professional workflows**: ${WORKFLOW_PROFESSIONAL_CONCURRENT} concurrent executions (design automation, content generation)
+- **Medium complexity**: ${WORKFLOW_MEDIUM_CONCURRENT} concurrent (API integrations, data transformation)
+- **Complex workflows**: ${WORKFLOW_COMPLEX_CONCURRENT} concurrent (heavy computations, project management)
+- **Resource-intensive tasks**: ${WORKFLOW_INTENSIVE_CONCURRENT} concurrent (file processing, AI model calls)
+- **Global webhook response**: ${PERFORMANCE_GLOBAL_RESPONSE} via Cloudflare edge network
+
+## Storage Strategy - Automated Hub Optimization
+- **Primary Data**: ${STORAGE_PRIMARY_DRIVE} drive cho ${DATABASE_NAME} database và active workflows
+- **Secondary Storage**: ${STORAGE_SECONDARY_DRIVE} drive cho backups và temporary files khi cần
+- **Extended SSD**: ${STORAGE_EXTENDED_SIZE} allocation:
+  - Figma files: ${SSD_FIGMA_FILES}
+  - Processing workspace: ${SSD_PROCESSING_WORKSPACE}
+  - Generated content: ${SSD_GENERATED_CONTENT}
+  - Archive & backup: ${SSD_ARCHIVE_BACKUP}
+  - System reserve: ${SSD_SYSTEM_RESERVE}
+
+## Network Configuration - ${TUNNEL_NAME}
+- **Primary Access**: https://${SUBDOMAIN_APP} (main n8n interface)
+- **Webhook URLs**: https://${SUBDOMAIN_API}/webhook/* (cho chatbots)
+- **Monitoring**: https://${SUBDOMAIN_STATUS} (system health)
+- **Tunnel Service**: cloudflared.exe as Windows service
+- **Tunnel UUID**: ${TUNNEL_UUID}
+- **Security**: ${SECURITY_DDOS_PROTECTION}, ${SECURITY_WAF}
+
+## System Limitations - Production Awareness
+- **CPU Performance**: ${HARDWARE_CPU_MODEL} ${HARDWARE_CPU_SERIES} có lower performance vs standard CPUs - design workflows accordingly
+- **RAM Constraints**: ${HARDWARE_RAM_TOTAL} limiting factor cho large datasets - implement smart caching
+- **Storage Limits**: Total ${STORAGE_TOTAL_AVAILABLE} requires careful space management và automated cleanup
+- **GPU Limitations**: ${HARDWARE_GPU} - no GPU acceleration available
+- **Power Efficiency**: ${HARDWARE_CPU_SERIES} optimized cho power efficiency, perfect cho 24/7 operation
+
+## Performance Targets - ${DOMAIN_PRIMARY} Hub
+- **Large File Loading**:
+  - Figma JSON 200MB: ${PERFORMANCE_FIGMA_JSON_200MB}
+  - Figma JSON 300MB: ${PERFORMANCE_FIGMA_JSON_300MB}
+- **Database Performance**: ${PERFORMANCE_DATABASE_QUERY} average
+- **Cache Efficiency**: ${PERFORMANCE_CACHE_HIT_RATIO} hit ratio
+- **Page Load Speed**: ${PERFORMANCE_PAGE_LOAD} n8n interface
+- **Global Response**: ${PERFORMANCE_GLOBAL_RESPONSE} worldwide
+
+## Memory Management Strategy
+- **Total RAM**: ${HARDWARE_RAM_TOTAL}
+- **N8N Workflows**: ${MEMORY_N8N_WORKFLOWS}
+- **System Applications**: ${MEMORY_SYSTEM_APPS}
+- **Processing Peak**: ${MEMORY_PROCESSING_PEAK}
+- **Cache Layer**: ${MEMORY_CACHE_LAYER}
+- **Warning Threshold**: ${MEMORY_WARNING_THRESHOLD}
+- **Critical Threshold**: ${MEMORY_CRITICAL_THRESHOLD}
+
+---
+
+*Hardware configuration rules optimized cho ${SYSTEM_MODEL} automation hub với enterprise-grade reliability và professional customization capabilities on ${DOMAIN_PRIMARY} domain.*
