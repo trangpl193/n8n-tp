@@ -250,16 +250,56 @@ function Start-N8nProduction {
             }
         }
         
+        # Stop existing n8n if running
+        try {
+            pm2 stop strangematic-hub 2>$null
+            pm2 delete strangematic-hub 2>$null
+            Start-Sleep -Seconds 3
+        } catch {
+            # No existing process
+        }
+        
         # Start with PM2
         pm2 start $Global:Config.ConfigCheck.N8N.EcosystemConfig --env production | Out-Null
-        Start-Sleep -Seconds 15
+        Start-Sleep -Seconds 20  # Wait longer for full startup
         
+        # Check if process is online
         $n8nStatus = pm2 list | Select-String "strangematic-hub.*online"
         if ($n8nStatus) {
             Write-Log "n8n started successfully" "SUCCESS"
+            
+            # Additional health check - wait for web interface
+            $webReady = $false
+            $webRetries = 0
+            while (-not $webReady -and $webRetries -lt 10) {
+                try {
+                    $response = Invoke-WebRequest -Uri $Global:Config.URLs.Local -TimeoutSec 5 -UseBasicParsing
+                    if ($response.StatusCode -eq 200) {
+                        $webReady = $true
+                        Write-Log "n8n web interface ready" "SUCCESS"
+                    }
+                } catch {
+                    $webRetries++
+                    Write-Log "Waiting for n8n web interface... ($webRetries/10)" "INFO"
+                    Start-Sleep -Seconds 5
+                }
+            }
+            
+            if (-not $webReady) {
+                Write-Log "n8n web interface not responding, but process is running" "WARNING"
+            }
+            
             return $true
         } else {
             Write-Log "n8n failed to start" "ERROR"
+            
+            # Show PM2 logs for debugging
+            Write-Log "Checking PM2 logs for errors..." "INFO"
+            $logs = pm2 logs strangematic-hub --lines 5 --nostream 2>$null
+            if ($logs) {
+                Write-Log "Recent PM2 logs: $logs" "WARNING"
+            }
+            
             return $false
         }
         
@@ -466,7 +506,29 @@ function Start-ManualMode {
 
 function Start-StartupMode {
     Write-Log "=== WINDOWS STARTUP MODE ===" "INFO"
-    Start-Sleep -Seconds 10  # Wait for Windows to fully load
+    
+    # Wait for Windows to fully load and services to be ready
+    Write-Log "Waiting for Windows startup to complete..." "INFO"
+    Start-Sleep -Seconds 30
+    
+    # Wait for network connectivity
+    $networkReady = $false
+    $networkRetries = 0
+    while (-not $networkReady -and $networkRetries -lt 10) {
+        try {
+            Test-NetConnection -ComputerName "8.8.8.8" -Port 53 -InformationLevel Quiet
+            $networkReady = $true
+            Write-Log "Network connectivity confirmed" "SUCCESS"
+        } catch {
+            $networkRetries++
+            Write-Log "Waiting for network connectivity... ($networkRetries/10)" "WARNING"
+            Start-Sleep -Seconds 10
+        }
+    }
+    
+    if (-not $networkReady) {
+        Write-Log "Network not ready, proceeding anyway..." "WARNING"
+    }
     
     Start-ManualMode
     

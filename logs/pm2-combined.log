@@ -1,0 +1,9 @@
+2025-08-01 23:24:07: ValidationError: The 'X-Forwarded-For' header is set but the Express 'trust proxy' setting is false (default). This could indicate a misconfiguration which would prevent express-rate-limit from accurately identifying users. See https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR/ for more information.
+2025-08-01 23:24:07:     at Object.xForwardedForHeader (C:\Github\n8n-tp\node_modules\.pnpm\express-rate-limit@7.5.0_express@5.1.0\node_modules\express-rate-limit\dist\index.cjs:187:13)
+2025-08-01 23:24:07:     at Object.wrappedValidations.<computed> [as xForwardedForHeader] (C:\Github\n8n-tp\node_modules\.pnpm\express-rate-limit@7.5.0_express@5.1.0\node_modules\express-rate-limit\dist\index.cjs:398:22)
+2025-08-01 23:24:07:     at Object.keyGenerator (C:\Github\n8n-tp\node_modules\.pnpm\express-rate-limit@7.5.0_express@5.1.0\node_modules\express-rate-limit\dist\index.cjs:671:20)
+2025-08-01 23:24:07:     at C:\Github\n8n-tp\node_modules\.pnpm\express-rate-limit@7.5.0_express@5.1.0\node_modules\express-rate-limit\dist\index.cjs:724:32
+2025-08-01 23:24:07:     at C:\Github\n8n-tp\node_modules\.pnpm\express-rate-limit@7.5.0_express@5.1.0\node_modules\express-rate-limit\dist\index.cjs:704:5 {
+2025-08-01 23:24:07:   code: 'ERR_ERL_UNEXPECTED_X_FORWARDED_FOR',
+2025-08-01 23:24:07:   help: 'https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR/'
+2025-08-01 23:24:07: }

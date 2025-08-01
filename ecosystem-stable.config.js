@@ -46,6 +46,10 @@ module.exports = {
 				N8N_PATH: '/',
 				N8N_LISTEN_ADDRESS: '0.0.0.0',
 				N8N_BASIC_AUTH_ACTIVE: 'false',
+				
+				// Cloudflare Tunnel Support
+				N8N_PROXY_HOPS: '1',
+				N8N_TRUST_PROXY: 'true',
 
 				// Stability
 				N8N_RUNNERS_ENABLED: 'true', // Enable task runners
