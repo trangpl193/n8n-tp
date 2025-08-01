@@ -1,0 +1,117 @@
+{
+  "name": "AI Content Generation Workflow",
+  "description": "Multi-model AI content generation với fallback logic và credential management",
+  "version": "1.0.0",
+  "category": "AI & Machine Learning",
+  "tags": ["ai", "content-generation", "openai", "claude", "gemini"],
+  "credentials": [
+    {
+      "name": "openai_api",
+      "type": "openai",
+      "required": true,
+      "description": "OpenAI API key for GPT models"
+    },
+    {
+      "name": "anthropic_api", 
+      "type": "anthropic",
+      "required": false,
+      "description": "Anthropic API key for Claude models (fallback)"
+    },
+    {
+      "name": "google_ai_api",
+      "type": "google-ai",
+      "required": false,
+      "description": "Google AI API key for Gemini models (fallback)"
+    }
+  ],
+  "workflow": {
+    "nodes": [
+      {
+        "id": "start",
+        "type": "n8n-nodes-base.manualTrigger",
+        "position": [100, 100],
+        "parameters": {}
+      },
+      {
+        "id": "input-validation",
+        "type": "n8n-nodes-base.function",
+        "position": [300, 100],
+        "parameters": {
+          "jsCode": "// Validate and prepare input for AI models\nconst input = items[0].json;\n\nif (!input.prompt || input.prompt.trim() === '') {\n  throw new Error('Prompt is required');\n}\n\nreturn [{\n  json: {\n    prompt: input.prompt.trim(),\n    maxTokens: input.maxTokens || 1000,\n    temperature: input.temperature || 0.7,\n    model: input.model || 'gpt-4'\n  }\n}];"
+        }
+      },
+      {
+        "id": "openai-primary",
+        "type": "n8n-nodes-base.openAi",
+        "position": [500, 50],
+        "parameters": {
+          "resource": "text",
+          "operation": "complete",
+          "model": "={{ $json.model }}",
+          "prompt": "={{ $json.prompt }}",
+          "maxTokens": "={{ $json.maxTokens }}",
+          "temperature": "={{ $json.temperature }}"
+        },
+        "credentials": {
+          "openAiApi": "{{ $credentials.openai_api }}"
+        },
+        "continueOnFail": true
+      },
+      {
+        "id": "claude-fallback",
+        "type": "n8n-nodes-base.anthropic",
+        "position": [500, 150],
+        "parameters": {
+          "model": "claude-3-sonnet-20240229",
+          "prompt": "={{ $json.prompt }}",
+          "maxTokens": "={{ $json.maxTokens }}",
+          "temperature": "={{ $json.temperature }}"
+        },
+        "credentials": {
+          "anthropicApi": "{{ $credentials.anthropic_api }}"
+        },
+        "continueOnFail": true,
+        "executeOnce": true
+      },
+      {
+        "id": "response-formatter",
+        "type": "n8n-nodes-base.function",
+        "position": [700, 100],
+        "parameters": {
+          "jsCode": "// Format AI response với metadata\nconst response = items[0].json;\n\nreturn [{\n  json: {\n    content: response.choices?.[0]?.text || response.content || 'No response generated',\n    model: response.model || 'unknown',\n    tokens: response.usage?.total_tokens || 0,\n    timestamp: new Date().toISOString(),\n    success: true\n  }\n}];"
+        }
+      }
+    ],
+    "connections": {
+      "start": {
+        "main": [[{"node": "input-validation", "type": "main", "index": 0}]]
+      },
+      "input-validation": {
+        "main": [[{"node": "openai-primary", "type": "main", "index": 0}]]
+      },
+      "openai-primary": {
+        "main": [[{"node": "response-formatter", "type": "main", "index": 0}]],
+        "error": [[{"node": "claude-fallback", "type": "main", "index": 0}]]
+      },
+      "claude-fallback": {
+        "main": [[{"node": "response-formatter", "type": "main", "index": 0}]]
+      }
+    }
+  },
+  "usage": {
+    "description": "This workflow generates content using AI models với automatic fallback logic",
+    "inputFormat": {
+      "prompt": "string (required) - The content prompt",
+      "maxTokens": "number (optional) - Maximum tokens to generate (default: 1000)",
+      "temperature": "number (optional) - Creativity level 0-1 (default: 0.7)",
+      "model": "string (optional) - Specific model to use (default: gpt-4)"
+    },
+    "outputFormat": {
+      "content": "string - Generated content",
+      "model": "string - Model used for generation",
+      "tokens": "number - Total tokens consumed",
+      "timestamp": "string - Generation timestamp",
+      "success": "boolean - Generation success status"
+    }
+  }
+}
