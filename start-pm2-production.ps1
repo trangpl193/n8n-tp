@@ -15,7 +15,7 @@ $env:DB_POSTGRESDB_HOST = "localhost"
 $env:DB_POSTGRESDB_PORT = "5432"
 $env:DB_POSTGRESDB_DATABASE = "strangematic_n8n"
 $env:DB_POSTGRESDB_USER = "strangematic_user"
-$env:DB_POSTGRESDB_PASSWORD = "strangematic_2024_secure!"
+$env:DB_POSTGRESDB_PASSWORD = "postgres123"
 
 Write-Host "Environment configured for domain: app.strangematic.com" -ForegroundColor Cyan
 
