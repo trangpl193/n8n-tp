@@ -165,7 +165,7 @@ function Start-CloudflareTunnel {
     Write-Log "Khoi dong Cloudflare tunnel..." "INFO"
     
     try {
-        # Start tunnel in background (hidden window)
+        # Start tunnel in background
         $process = Start-Process -FilePath "C:\cloudflared\cloudflared.exe" -ArgumentList "tunnel", "--config", "C:\cloudflared\config.yml", "run" -WindowStyle Hidden -PassThru
         Start-Sleep -Seconds 8
         
@@ -211,22 +211,9 @@ function Start-N8nProduction {
             # No existing process
         }
         
-        # Start n8n with PM2 (using Windows-specific hidden start)
+        # Start n8n with PM2
         Write-Log "Khoi dong PM2 voi ecosystem config..." "INFO"
-        
-        # Use cmd with /B flag to start without new window
-        $startInfo = New-Object System.Diagnostics.ProcessStartInfo
-        $startInfo.FileName = "cmd.exe"
-        $startInfo.Arguments = "/c pm2 start ecosystem-stable.config.js --env production"
-        $startInfo.WindowStyle = [System.Diagnostics.ProcessWindowStyle]::Hidden
-        $startInfo.CreateNoWindow = $true
-        $startInfo.UseShellExecute = $false
-        
-        $process = New-Object System.Diagnostics.Process
-        $process.StartInfo = $startInfo
-        $process.Start() | Out-Null
-        $process.WaitForExit()
-        
+        pm2 start ecosystem-stable.config.js --env production | Out-Null
         Start-Sleep -Seconds 25  # Wait for full startup
         
         # Check if process is running
@@ -235,30 +222,6 @@ function Start-N8nProduction {
         
         if ($n8nOnline) {
             Write-Log "n8n da khoi dong thanh cong voi PM2" "SUCCESS"
-            
-            # Hide any node.exe windows that might have appeared
-            try {
-                Add-Type -TypeDefinition @"
-                    using System;
-                    using System.Runtime.InteropServices;
-                    public class Win32 {
-                        [DllImport("user32.dll")]
-                        public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-                        [DllImport("user32.dll")]
-                        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-                    }
-"@
-                # Find and hide node.exe console windows
-                $nodeProcesses = Get-Process -Name "node" -ErrorAction SilentlyContinue
-                foreach ($proc in $nodeProcesses) {
-                    if ($proc.MainWindowHandle -ne [IntPtr]::Zero) {
-                        [Win32]::ShowWindow($proc.MainWindowHandle, 0) # 0 = SW_HIDE
-                    }
-                }
-                Write-Log "Da an cac cua so node.exe" "INFO"
-            } catch {
-                Write-Log "Khong the an cua so node.exe: $($_.Exception.Message)" "WARNING"
-            }
             
             # Test web interface
             $webReady = $false

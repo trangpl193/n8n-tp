@@ -9,6 +9,16 @@ module.exports = {
 			args: 'packages/cli/bin/n8n',
 			cwd: process.cwd(),
 
+			// PM2 Window Settings - Hide console windows
+			windowsHide: true,
+			detached: true,
+			silent: true,
+			
+			// Additional window hiding for Windows
+			exec_mode: 'fork',
+			min_uptime: '10s',
+			max_restarts: 5,
+
 			// Environment
 			env: {
 				NODE_ENV: 'production',

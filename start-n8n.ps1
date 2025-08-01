@@ -1,6 +1,8 @@
 # ============================================
-# N8N Manual Startup Script - Simplified
+# 🚀 N8N Manual Startup Script - Simplified
 # ============================================
+# Đơn giản hóa để khởi chạy manual n8n với đầy đủ thông số
+# Chỉ chạy khi cần, không tự động
 
 param(
     [switch]$Silent = $false
@@ -45,7 +47,7 @@ function Test-AdminPrivileges {
     $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
     
     if (-not $isAdmin) {
-        Write-Log "Khoi dong lai voi quyen Administrator..." "WARNING"
+        Write-Log "Khởi động lại với quyền Administrator..." "WARNING"
         
         $scriptPath = $MyInvocation.MyCommand.Path
         $arguments = @("-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "`"$scriptPath`"")
@@ -55,13 +57,13 @@ function Test-AdminPrivileges {
             Start-Process PowerShell -ArgumentList $arguments -Verb RunAs
             exit 0
         } catch {
-            Write-Log "Khong the khoi dong voi quyen admin: $($_.Exception.Message)" "ERROR"
-            Read-Host "Nhan Enter de thoat"
+            Write-Log "Không thể khởi động với quyền admin: $($_.Exception.Message)" "ERROR"
+            Read-Host "Nhấn Enter để thoát"
             exit 1
         }
     }
     
-    Write-Log "Dang chay voi quyen Administrator" "SUCCESS"
+    Write-Log "Đang chạy với quyền Administrator" "SUCCESS"
     return $true
 }
 
@@ -69,22 +71,22 @@ function Test-AdminPrivileges {
 # PREREQUISITES CHECK
 # ============================================
 function Test-Prerequisites {
-    Write-Log "Kiem tra cac dieu kien tien quyet..." "INFO"
+    Write-Log "Kiểm tra các điều kiện tiên quyết..." "INFO"
     $allGood = $true
     
     # Check PostgreSQL Service
     try {
         $pgService = Get-Service -Name "postgresql-x64-17" -ErrorAction Stop
         if ($pgService.Status -eq "Running") {
-            Write-Log "PostgreSQL service dang chay" "SUCCESS"
+            Write-Log "PostgreSQL service đang chạy" "SUCCESS"
         } else {
-            Write-Log "PostgreSQL service khong chay - dang khoi dong..." "WARNING"
+            Write-Log "PostgreSQL service không chạy - đang khởi động..." "WARNING"
             Start-Service -Name "postgresql-x64-17"
             Start-Sleep -Seconds 5
-            Write-Log "PostgreSQL service da duoc khoi dong" "SUCCESS"
+            Write-Log "PostgreSQL service đã được khởi động" "SUCCESS"
         }
     } catch {
-        Write-Log "Loi PostgreSQL: $($_.Exception.Message)" "ERROR"
+        Write-Log "Lỗi PostgreSQL: $($_.Exception.Message)" "ERROR"
         $allGood = $false
     }
     
@@ -93,39 +95,39 @@ function Test-Prerequisites {
         $tcpClient = New-Object System.Net.Sockets.TcpClient
         $tcpClient.Connect("localhost", 5432)
         $tcpClient.Close()
-        Write-Log "Ket noi database thanh cong" "SUCCESS"
+        Write-Log "Kết nối database thành công" "SUCCESS"
     } catch {
-        Write-Log "Khong the ket noi database" "ERROR"
+        Write-Log "Không thể kết nối database" "ERROR"
         $allGood = $false
     }
     
     # Check Cloudflared
     if (Test-Path "C:\cloudflared\cloudflared.exe") {
-        Write-Log "Cloudflared executable co san" "SUCCESS"
+        Write-Log "Cloudflared executable có sẵn" "SUCCESS"
     } else {
-        Write-Log "Cloudflared khong tim thay" "ERROR"
+        Write-Log "Cloudflared không tìm thấy" "ERROR"
         $allGood = $false
     }
     
     if (Test-Path "C:\cloudflared\config.yml") {
-        Write-Log "Cloudflared config co san" "SUCCESS"
+        Write-Log "Cloudflared config có sẵn" "SUCCESS"
     } else {
-        Write-Log "Cloudflared config khong tim thay" "ERROR"
+        Write-Log "Cloudflared config không tìm thấy" "ERROR"
         $allGood = $false
     }
     
     # Check n8n files
     if (Test-Path "ecosystem-stable.config.js") {
-        Write-Log "n8n ecosystem config co san" "SUCCESS"
+        Write-Log "n8n ecosystem config có sẵn" "SUCCESS"
     } else {
-        Write-Log "n8n ecosystem config khong tim thay" "ERROR"
+        Write-Log "n8n ecosystem config không tìm thấy" "ERROR"
         $allGood = $false
     }
     
     if (Test-Path ".env.production") {
-        Write-Log "n8n environment file co san" "SUCCESS"
+        Write-Log "n8n environment file có sẵn" "SUCCESS"
     } else {
-        Write-Log "n8n environment file khong tim thay" "ERROR"
+        Write-Log "n8n environment file không tìm thấy" "ERROR"
         $allGood = $false
     }
     
@@ -136,15 +138,15 @@ function Test-Prerequisites {
 # CLEANUP EXISTING PROCESSES
 # ============================================
 function Stop-ExistingProcesses {
-    Write-Log "Don dep cac process cu..." "INFO"
+    Write-Log "Dọn dẹp các process cũ..." "INFO"
     
     # Stop PM2
     try {
         pm2 kill 2>$null | Out-Null
         Start-Sleep -Seconds 3
-        Write-Log "PM2 daemon da dung" "SUCCESS"
+        Write-Log "PM2 daemon đã dừng" "SUCCESS"
     } catch {
-        Write-Log "PM2 khong chay" "INFO"
+        Write-Log "PM2 không chạy" "INFO"
     }
     
     # Stop related processes
@@ -152,7 +154,7 @@ function Stop-ExistingProcesses {
         $processes = Get-Process -Name $_ -ErrorAction SilentlyContinue
         if ($processes) {
             $processes | Stop-Process -Force -ErrorAction SilentlyContinue
-            Write-Log "Da dung $_ processes ($($processes.Count))" "SUCCESS"
+            Write-Log "Đã dừng $_processes ($($processes.Count))" "SUCCESS"
             Start-Sleep -Seconds 1
         }
     }
@@ -162,23 +164,23 @@ function Stop-ExistingProcesses {
 # START CLOUDFLARE TUNNEL
 # ============================================
 function Start-CloudflareTunnel {
-    Write-Log "Khoi dong Cloudflare tunnel..." "INFO"
+    Write-Log "Khởi động Cloudflare tunnel..." "INFO"
     
     try {
-        # Start tunnel in background (hidden window)
+        # Start tunnel in background
         $process = Start-Process -FilePath "C:\cloudflared\cloudflared.exe" -ArgumentList "tunnel", "--config", "C:\cloudflared\config.yml", "run" -WindowStyle Hidden -PassThru
         Start-Sleep -Seconds 8
         
         if ($process -and -not $process.HasExited) {
-            Write-Log "Cloudflare tunnel da khoi dong (PID: $($process.Id))" "SUCCESS"
+            Write-Log "Cloudflare tunnel đã khởi động (PID: $($process.Id))" "SUCCESS"
             return $true
         } else {
-            Write-Log "Khong the khoi dong Cloudflare tunnel" "ERROR"
+            Write-Log "Không thể khởi động Cloudflare tunnel" "ERROR"
             return $false
         }
         
     } catch {
-        Write-Log "Loi khoi dong tunnel: $($_.Exception.Message)" "ERROR"
+        Write-Log "Lỗi khởi động tunnel: $($_.Exception.Message)" "ERROR"
         return $false
     }
 }
@@ -187,7 +189,7 @@ function Start-CloudflareTunnel {
 # START N8N PRODUCTION
 # ============================================
 function Start-N8nProduction {
-    Write-Log "Khoi dong n8n production..." "INFO"
+    Write-Log "Khởi động n8n production..." "INFO"
     
     try {
         # Load environment variables
@@ -211,22 +213,9 @@ function Start-N8nProduction {
             # No existing process
         }
         
-        # Start n8n with PM2 (using Windows-specific hidden start)
-        Write-Log "Khoi dong PM2 voi ecosystem config..." "INFO"
-        
-        # Use cmd with /B flag to start without new window
-        $startInfo = New-Object System.Diagnostics.ProcessStartInfo
-        $startInfo.FileName = "cmd.exe"
-        $startInfo.Arguments = "/c pm2 start ecosystem-stable.config.js --env production"
-        $startInfo.WindowStyle = [System.Diagnostics.ProcessWindowStyle]::Hidden
-        $startInfo.CreateNoWindow = $true
-        $startInfo.UseShellExecute = $false
-        
-        $process = New-Object System.Diagnostics.Process
-        $process.StartInfo = $startInfo
-        $process.Start() | Out-Null
-        $process.WaitForExit()
-        
+        # Start n8n with PM2
+        Write-Log "Khởi động PM2 với ecosystem config..." "INFO"
+        pm2 start ecosystem-stable.config.js --env production | Out-Null
         Start-Sleep -Seconds 25  # Wait for full startup
         
         # Check if process is running
@@ -234,76 +223,52 @@ function Start-N8nProduction {
         $n8nOnline = $pmList | Select-String "strangematic-hub.*online"
         
         if ($n8nOnline) {
-            Write-Log "n8n da khoi dong thanh cong voi PM2" "SUCCESS"
-            
-            # Hide any node.exe windows that might have appeared
-            try {
-                Add-Type -TypeDefinition @"
-                    using System;
-                    using System.Runtime.InteropServices;
-                    public class Win32 {
-                        [DllImport("user32.dll")]
-                        public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-                        [DllImport("user32.dll")]
-                        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-                    }
-"@
-                # Find and hide node.exe console windows
-                $nodeProcesses = Get-Process -Name "node" -ErrorAction SilentlyContinue
-                foreach ($proc in $nodeProcesses) {
-                    if ($proc.MainWindowHandle -ne [IntPtr]::Zero) {
-                        [Win32]::ShowWindow($proc.MainWindowHandle, 0) # 0 = SW_HIDE
-                    }
-                }
-                Write-Log "Da an cac cua so node.exe" "INFO"
-            } catch {
-                Write-Log "Khong the an cua so node.exe: $($_.Exception.Message)" "WARNING"
-            }
+            Write-Log "n8n đã khởi động thành công với PM2" "SUCCESS"
             
             # Test web interface
             $webReady = $false
             $webRetries = 0
-            Write-Log "Kiem tra web interface..." "INFO"
+            Write-Log "Kiểm tra web interface..." "INFO"
             
             while (-not $webReady -and $webRetries -lt 12) {
                 try {
                     $response = Invoke-WebRequest -Uri "http://localhost:5678" -TimeoutSec 8 -UseBasicParsing
                     if ($response.StatusCode -eq 200) {
                         $webReady = $true
-                        Write-Log "n8n web interface da san sang" "SUCCESS"
+                        Write-Log "n8n web interface đã sẵn sàng" "SUCCESS"
                     }
                 } catch {
                     $webRetries++
-                    Write-Log "Dang cho web interface... ($webRetries/12)" "INFO"
+                    Write-Log "Đang chờ web interface... ($webRetries/12)" "INFO"
                     Start-Sleep -Seconds 5
                 }
             }
             
             if (-not $webReady) {
-                Write-Log "Web interface chua phan hoi nhung process da chay" "WARNING"
+                Write-Log "Web interface chưa phản hồi nhưng process đã chạy" "WARNING"
             }
             
             return $true
         } else {
-            Write-Log "n8n khong khoi dong duoc" "ERROR"
+            Write-Log "n8n không khởi động được" "ERROR"
             
             # Show logs for debugging
-            Write-Log "Kiem tra PM2 logs..." "INFO"
+            Write-Log "Kiểm tra PM2 logs..." "INFO"
             try {
                 $logs = pm2 logs strangematic-hub --lines 10 --nostream 2>$null
                 if ($logs) {
-                    Write-Log "PM2 logs gan day:" "WARNING"
+                    Write-Log "PM2 logs gần đây:" "WARNING"
                     $logs | ForEach-Object { Write-Log $_ "WARNING" }
                 }
             } catch {
-                Write-Log "Khong the lay PM2 logs" "WARNING"
+                Write-Log "Không thể lấy PM2 logs" "WARNING"
             }
             
             return $false
         }
         
     } catch {
-        Write-Log "Loi khoi dong n8n: $($_.Exception.Message)" "ERROR"
+        Write-Log "Lỗi khởi động n8n: $($_.Exception.Message)" "ERROR"
         return $false
     }
 }
@@ -312,7 +277,7 @@ function Start-N8nProduction {
 # HEALTH CHECK
 # ============================================
 function Test-SystemHealth {
-    Write-Log "Kiem tra tinh trang he thong..." "INFO"
+    Write-Log "Kiểm tra tình trạng hệ thống..." "INFO"
     $healthScore = 0
     $totalChecks = 4
     
@@ -372,7 +337,7 @@ function Test-SystemHealth {
 
 Write-Host ""
 Write-Host "=======================================" -ForegroundColor Cyan
-Write-Host "[START] N8N MANUAL STARTUP - STRANGEMATIC" -ForegroundColor Cyan
+Write-Host "[OK] N8N MANUAL STARTUP - STRANGEMATIC" -ForegroundColor Cyan
 Write-Host "=======================================" -ForegroundColor Cyan
 Write-Host ""
 
@@ -384,9 +349,9 @@ Set-Location $PSScriptRoot
 
 # Prerequisites check
 if (-not (Test-Prerequisites)) {
-    Write-Log "Dieu kien tien quyet khong du - dung script" "ERROR"
+    Write-Log "Điều kiện tiên quyết không đủ - dừng script" "ERROR"
     if (-not $Silent) {
-        Read-Host "Nhan Enter de thoat"
+        Read-Host "Nhấn Enter để thoát"
     }
     exit 1
 }
@@ -396,18 +361,18 @@ Stop-ExistingProcesses
 
 # Start Cloudflare tunnel
 if (-not (Start-CloudflareTunnel)) {
-    Write-Log "Khong the khoi dong tunnel - dung script" "ERROR"
+    Write-Log "Không thể khởi động tunnel - dừng script" "ERROR"
     if (-not $Silent) {
-        Read-Host "Nhan Enter de thoat"
+        Read-Host "Nhấn Enter để thoát"
     }
     exit 1
 }
 
 # Start n8n
 if (-not (Start-N8nProduction)) {
-    Write-Log "Khong the khoi dong n8n - dung script" "ERROR"
+    Write-Log "Không thể khởi động n8n - dừng script" "ERROR"
     if (-not $Silent) {
-        Read-Host "Nhan Enter de thoat"
+        Read-Host "Nhấn Enter để thoát"
     }
     exit 1
 }
@@ -438,10 +403,10 @@ Write-Host "[STATUS] PM2 Status:" -ForegroundColor Cyan
 try {
     pm2 list
 } catch {
-    Write-Host "Khong the hien thi PM2 status" -ForegroundColor Red
+    Write-Host "Không thể hiển thị PM2 status" -ForegroundColor Red
 }
 
 Write-Host ""
 if (-not $Silent) {
-    Read-Host "Nhan Enter de thoat"
+    Read-Host "Nhấn Enter để thoát"
 }
