@@ -72,11 +72,11 @@ function Write-Log {
         }
         
         $icon = switch ($Level) {
-            "SUCCESS" { "✅" }
-            "ERROR"   { "❌" }
-            "WARNING" { "⚠️" }
-            "INFO"    { "ℹ️" }
-            default   { "•" }
+            "SUCCESS" { "[OK]" }
+            "ERROR"   { "[ERR]" }
+            "WARNING" { "[WARN]" }
+            "INFO"    { "[INFO]" }
+            default   { "[*]" }
         }
         
         Write-Host "$icon $Message" -ForegroundColor $color
@@ -243,7 +243,7 @@ function Start-N8nProduction {
     try {
         # Load environment
         Get-Content $Global:Config.ConfigCheck.N8N.EnvFile | ForEach-Object {
-            if ($_ -match "^([^#][^=]+)=(.*)$") {
+            if ($_ -match "^([^#].*)=(.*)$") {
                 $name = $matches[1].Trim()
                 $value = $matches[2].Trim()
                 [Environment]::SetEnvironmentVariable($name, $value, "Process")
@@ -322,7 +322,8 @@ function Test-SystemHealth {
     }
     
     $healthPercent = [math]::Round(($healthScore / $totalChecks) * 100)
-    Write-Log "Overall health: $healthScore/$totalChecks ($healthPercent%)" $(if ($healthPercent -ge 75) { "SUCCESS" } elseif ($healthPercent -ge 50) { "WARNING" } else { "ERROR" })
+    $healthLevel = if ($healthPercent -ge 75) { "SUCCESS" } elseif ($healthPercent -ge 50) { "WARNING" } else { "ERROR" }
+    Write-Log "Overall health: $healthScore/$totalChecks ($healthPercent%)" $healthLevel
     
     return @{
         Score = $healthScore
@@ -386,7 +387,7 @@ Set-Location "$PWD"
 PowerShell.exe -NoProfile -ExecutionPolicy Bypass -File "$($MyInvocation.MyCommand.Path)" -Mode startup -Silent
 "@
         
-        $startupPath = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\StrangematicHub.ps1"
+        $startupPath = Join-Path $env:APPDATA "Microsoft\Windows\Start Menu\Programs\Startup\StrangematicHub.ps1"
         Set-Content -Path $startupPath -Value $startupScript
         
         Write-Log "Startup integration installed" "SUCCESS"
@@ -418,7 +419,7 @@ Set-Location "$PWD"
 function Uninstall-StartupIntegration {
     Write-Log "Removing Windows startup integration..." "INFO"
     
-    $startupPath = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\StrangematicHub.ps1"
+    $startupPath = Join-Path $env:APPDATA "Microsoft\Windows\Start Menu\Programs\Startup\StrangematicHub.ps1"
     if (Test-Path $startupPath) {
         Remove-Item -Path $startupPath -Force
         Write-Log "Startup integration removed" "SUCCESS"
@@ -559,7 +560,7 @@ switch ($Mode.ToLower()) {
     }
     default {
         Write-Log "Usage: strangematic-hub.ps1 -Mode [manual|startup|service|health|install|uninstall]" "INFO"
-        Write-Log "Options: -Silent, -AutoRecover, -MaxRetries <number>" "INFO"
+        Write-Log "Options: -Silent, -AutoRecover, -MaxRetries number" "INFO"
         exit 1
     }
 }
