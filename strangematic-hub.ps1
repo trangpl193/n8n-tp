@@ -109,6 +109,17 @@ function Test-AdminPrivileges {
     
     if ($isAdmin) {
         Write-Log "Running with Administrator privileges" "SUCCESS"
+        
+        # Prevent background task suspension
+        try {
+            Write-Log "Preventing background task suspension..." "INFO"
+            powercfg /SETACVALUEINDEX SCHEME_CURRENT SUB_BACKGROUND_APPS_POLICY BackgroundAppPolicy 0 2>$null | Out-Null
+            powercfg /SETDCVALUEINDEX SCHEME_CURRENT SUB_BACKGROUND_APPS_POLICY BackgroundAppPolicy 0 2>$null | Out-Null  
+            powercfg /SETACTIVE SCHEME_CURRENT 2>$null | Out-Null
+            Write-Log "Background app suspension prevention configured" "SUCCESS"
+        } catch {
+            Write-Log "Could not modify power policy: $($_.Exception.Message)" "WARNING"
+        }
     }
     return $isAdmin
 }
