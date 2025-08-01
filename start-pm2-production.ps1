@@ -3,6 +3,21 @@
 
 Write-Host "Starting PM2 with Strangematic Domain Configuration..." -ForegroundColor Green
 
+# Check if running as Administrator
+$isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
+
+if (-not $isAdmin) {
+    Write-Host "❌ Script requires Administrator privileges!" -ForegroundColor Red
+    Write-Host "🔄 Restarting with admin privileges..." -ForegroundColor Yellow
+    
+    # Restart script as admin
+    $scriptPath = $MyInvocation.MyCommand.Path
+    Start-Process PowerShell -ArgumentList "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "`"$scriptPath`"" -Verb RunAs
+    exit
+}
+
+Write-Host "✅ Running with Administrator privileges" -ForegroundColor Green
+
 # Set environment variables for the session
 $env:NODE_ENV = "production"
 $env:N8N_EDITOR_BASE_URL = "https://app.strangematic.com"
