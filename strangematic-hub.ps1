@@ -259,14 +259,49 @@ function Start-N8nProduction {
             # No existing process
         }
         
-        # Start with PM2
-        pm2 start $Global:Config.ConfigCheck.N8N.EcosystemConfig --env production | Out-Null
+        # Start with PM2 (Windows-friendly hidden start)
+        $startInfo = New-Object System.Diagnostics.ProcessStartInfo
+        $startInfo.FileName = "cmd.exe"
+        $startInfo.Arguments = "/c pm2 start $($Global:Config.ConfigCheck.N8N.EcosystemConfig) --env production"
+        $startInfo.WindowStyle = [System.Diagnostics.ProcessWindowStyle]::Hidden
+        $startInfo.CreateNoWindow = $true
+        $startInfo.UseShellExecute = $false
+        
+        $process = New-Object System.Diagnostics.Process
+        $process.StartInfo = $startInfo
+        $process.Start() | Out-Null
+        $process.WaitForExit()
+        
         Start-Sleep -Seconds 20  # Wait longer for full startup
         
         # Check if process is online
         $n8nStatus = pm2 list | Select-String "strangematic-hub.*online"
         if ($n8nStatus) {
             Write-Log "n8n started successfully" "SUCCESS"
+            
+            # Hide any node.exe windows that might have appeared
+            try {
+                Add-Type -TypeDefinition @"
+                    using System;
+                    using System.Runtime.InteropServices;
+                    public class Win32 {
+                        [DllImport("user32.dll")]
+                        public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+                        [DllImport("user32.dll")]
+                        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+                    }
+"@
+                # Find and hide node.exe console windows
+                $nodeProcesses = Get-Process -Name "node" -ErrorAction SilentlyContinue
+                foreach ($proc in $nodeProcesses) {
+                    if ($proc.MainWindowHandle -ne [IntPtr]::Zero) {
+                        [Win32]::ShowWindow($proc.MainWindowHandle, 0) # 0 = SW_HIDE
+                    }
+                }
+                Write-Log "Hidden node.exe console windows" "INFO"
+            } catch {
+                Write-Log "Could not hide node.exe windows: $($_.Exception.Message)" "WARNING"
+            }
             
             # Additional health check - wait for web interface
             $webReady = $false
