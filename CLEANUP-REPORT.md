@@ -64,9 +64,27 @@
 - ✅ **YEScale API Integration:** Configured with access keys and base URL  
 - ✅ **Production Startup:** All startup scripts updated with improved parsing logic
 - ✅ **System Stability:** n8n running successfully on strangematic.com domain
-- ✅ **Debug Cleanup:** Removed all temporary debugging and test scripts  
-- **Net Change:** -13 files, cleaner project structure
+- ✅ **Debug Cleanup:** Removed all temporary debugging and test scripts (×2 cleanup sessions)
+- ✅ **Telegram Bot Integration:** Added advanced workflows and setup documentation
+- **Net Change:** -19 debug files removed, +4 production workflows added
 - **Status:** ✅ Production deployment optimized and running
+
+## 🤖 TELEGRAM BOT INTEGRATION (Latest Merge)
+### ✨ **New Workflows Added:**
+- `telegram-yescale-bot-workflow.json` - Basic Telegram-YEScale integration
+- `telegram-yescale-bot-advanced-fixed.json` - Advanced bot with error handling
+- `telegram-yescale-bot-clean.json` - Clean production-ready bot workflow
+
+### 📚 **Documentation Added:**
+- `docs/telegram-bot-setup-guide.md` - Complete setup guide for Telegram bot integration
+
+### 🧹 **Debug Files Cleaned (Session 2):**
+- `debug-env-parsing.ps1` - Reappeared after merge, removed again
+- `debug-env-simple.ps1` - Reappeared after merge, removed again  
+- `start-n8n-simple-fixed.ps1` - Backup script, removed
+- `test-env-fixed-v2.ps1` - Test script, removed
+- `test-env-loading-fixed.ps1` - Test script, removed
+- `test-env-parsing.ps1` - Test script, removed
 
 ---
 *This cleanup removes all temporary scripts and documentation created during the troubleshooting phase, leaving only production-ready configuration files.*
