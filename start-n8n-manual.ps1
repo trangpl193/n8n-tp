@@ -134,7 +134,7 @@ function Test-Prerequisites {
         $allGood = $false
     }
     
-    if (Test-Path ".env.production") {
+    if (Test-Path ".env") {
         Write-Log "n8n environment file co san" "SUCCESS"
     } else {
         Write-Log "n8n environment file khong tim thay" "ERROR"
@@ -203,8 +203,8 @@ function Start-N8nProduction {
     
     try {
         # Load environment variables
-        if (Test-Path ".env.production") {
-            Get-Content ".env.production" | ForEach-Object {
+        if (Test-Path ".env") {
+            Get-Content ".env" | ForEach-Object {
                 $line = $_.Trim()
                 if ($line -and !$line.StartsWith("#") -and $line.Contains("=")) {
                     $equalsIndex = $line.IndexOf("=")

@@ -92,11 +92,11 @@ function Test-Prerequisites {
         return $false
     }
     
-    # Check .env.production
-    if (Test-Path ".env.production") {
+    # Check .env
+    if (Test-Path ".env") {
         Write-Status "Environment configuration found" "SUCCESS"
     } else {
-        Write-Status ".env.production not found" "ERROR"
+        Write-Status ".env not found" "ERROR"
         $script:errors += "Environment config missing"
         return $false
     }
@@ -179,7 +179,7 @@ function Start-N8nProduction {
     try {
         # Load environment variables (FIXED VERSION)
         Write-Status "Loading production environment..." "INFO"
-        Get-Content ".env.production" | ForEach-Object {
+        Get-Content ".env" | ForEach-Object {
             $line = $_.Trim()
             # Skip empty lines and comments
             if ($line -and -not $line.StartsWith("#")) {

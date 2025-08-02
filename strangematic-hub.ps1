@@ -20,7 +20,7 @@ $Global:Config = @{
     ConfigCheck = @{
         PostgreSQL = @{ Service = "postgresql-x64-17"; Port = 5432 }
         Cloudflared = @{ Path = "C:\cloudflared\cloudflared.exe"; Config = "C:\cloudflared\config.yml" }
-        N8N = @{ EcosystemConfig = "ecosystem-stable.config.js"; EnvFile = ".env.production" }
+        N8N = @{ EcosystemConfig = "ecosystem-stable.config.js"; EnvFile = ".env" }
     }
     URLs = @{
         Local = "http://localhost:5678"
