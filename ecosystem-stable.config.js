@@ -19,8 +19,13 @@ module.exports = {
 			min_uptime: '10s',
 			max_restarts: 5,
 
-			// Environment
+			// Environment - Development
 			env: {
+				NODE_ENV: 'development',
+			},
+
+			// Environment - Production
+			env_production: {
 				NODE_ENV: 'production',
 				N8N_EDITOR_BASE_URL: 'https://app.strangematic.com',
 				WEBHOOK_URL: 'https://api.strangematic.com',
