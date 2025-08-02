@@ -205,9 +205,17 @@ function Start-N8nProduction {
         # Load environment variables
         if (Test-Path ".env.production") {
             Get-Content ".env.production" | ForEach-Object {
-                if ($_ -match "^([^#].*)=(.*)$") {
-                    $name = $matches[1].Trim()
-                    $value = $matches[2].Trim()
+                $line = $_.Trim()
+                if ($line -and !$line.StartsWith("#") -and $line.Contains("=")) {
+                    $equalsIndex = $line.IndexOf("=")
+                    $name = $line.Substring(0, $equalsIndex).Trim()
+                    $value = $line.Substring($equalsIndex + 1).Trim()
+                    
+                    # Remove surrounding quotes if present
+                    if ($value.StartsWith('"') -and $value.EndsWith('"')) {
+                        $value = $value.Substring(1, $value.Length - 2)
+                    }
+                    
                     [Environment]::SetEnvironmentVariable($name, $value, "Process")
                     Write-Log "Loaded env: $name" "INFO"
                 }

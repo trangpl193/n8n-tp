@@ -177,13 +177,32 @@ function Start-N8nProduction {
     Write-Status "Starting n8n production..." "STEP"
     
     try {
-        # Load environment variables
+        # Load environment variables (FIXED VERSION)
         Write-Status "Loading production environment..." "INFO"
         Get-Content ".env.production" | ForEach-Object {
-            if ($_ -match "^([^#][^=]+)=(.*)$") {
-                $name = $matches[1].Trim()
-                $value = $matches[2].Trim()
-                [Environment]::SetEnvironmentVariable($name, $value, "Process")
+            $line = $_.Trim()
+            # Skip empty lines and comments
+            if ($line -and -not $line.StartsWith("#")) {
+                # Find first = as separator (fixed parsing)
+                $equalIndex = $line.IndexOf("=")
+                if ($equalIndex -gt 0) {
+                    $name = $line.Substring(0, $equalIndex).Trim()
+                    $value = $line.Substring($equalIndex + 1).Trim()
+                    
+                    # Remove surrounding quotes if present
+                    if (($value.StartsWith('"') -and $value.EndsWith('"')) -or 
+                        ($value.StartsWith("'") -and $value.EndsWith("'"))) {
+                        $value = $value.Substring(1, $value.Length - 2)
+                    }
+                    
+                    try {
+                        [Environment]::SetEnvironmentVariable($name, $value, "Process")
+                        Write-Status "Loaded env: $name" "INFO"
+                    } catch {
+                        Write-Status "Error loading env $name`: $($_.Exception.Message)" "ERROR"
+                        $script:errors += "Environment error: $name"
+                    }
+                }
             }
         }
         

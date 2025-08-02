@@ -1,0 +1,272 @@
+{
+  "meta": {
+    "instanceId": "strangematic-n8n-production"
+  },
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "1a2b3c4d-5e6f-7g8h-9i0j-k1l2m3n4o5p6",
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://yescale.bogia.app/yescale/user",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "2b3c4d5e-6f7g-8h9i-0j1k-l2m3n4o5p6q7",
+      "name": "Get YEScale User Info",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        460,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "yescale-auth-header",
+          "name": "YEScale Auth Header"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://yescale.bogia.app/yescale/apikeylist",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "3c4d5e6f-7g8h-9i0j-1k2l-m3n4o5p6q7r8",
+      "name": "List YEScale API Keys",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        680,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "yescale-auth-header",
+          "name": "YEScale Auth Header"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://yescale.bogia.app/yescale/models",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "4d5e6f7g-8h9i-0j1k-2l3m-n4o5p6q7r8s9",
+      "name": "List YEScale Models",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        900,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "yescale-auth-header",
+          "name": "YEScale Auth Header"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "user_info",
+              "value": "={{ JSON.stringify($node[\"Get YEScale User Info\"].json, null, 2) }}"
+            },
+            {
+              "name": "api_keys_count",
+              "value": "={{ $node[\"List YEScale API Keys\"].json.data.length }}"
+            },
+            {
+              "name": "models_count",
+              "value": "={{ $node[\"List YEScale Models\"].json.data.length }}"
+            },
+            {
+              "name": "quota_remaining_usd",
+              "value": "={{ ($node[\"Get YEScale User Info\"].json.data.quota / 500000).toFixed(2) }}"
+            },
+            {
+              "name": "quota_used_usd",
+              "value": "={{ ($node[\"Get YEScale User Info\"].json.data.used_quota / 500000).toFixed(2) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5e6f7g8h-9i0j-1k2l-3m4n-o5p6q7r8s9t0",
+      "name": "Format Results",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1120,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "condition1",
+              "leftValue": "={{ $node[\"Get YEScale User Info\"].json.success }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "6f7g8h9i-0j1k-2l3m-4n5o-p6q7r8s9t0u1",
+      "name": "Check API Success",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1340,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={{ {\n  \"status\": \"success\",\n  \"timestamp\": new Date().toISOString(),\n  \"yescale_account\": {\n    \"display_name\": $node[\"Get YEScale User Info\"].json.data.display_name,\n    \"email\": $node[\"Get YEScale User Info\"].json.data.email,\n    \"quota_remaining_usd\": ($node[\"Get YEScale User Info\"].json.data.quota / 500000).toFixed(2),\n    \"quota_used_usd\": ($node[\"Get YEScale User Info\"].json.data.used_quota / 500000).toFixed(2),\n    \"request_count\": $node[\"Get YEScale User Info\"].json.data.request_count\n  },\n  \"api_keys\": {\n    \"total_count\": $node[\"List YEScale API Keys\"].json.data.length,\n    \"active_keys\": $node[\"List YEScale API Keys\"].json.data.filter(key => key.status === 1).length,\n    \"keys_details\": $node[\"List YEScale API Keys\"].json.data.map(key => ({\n      \"id\": key.id,\n      \"name\": key.name,\n      \"status\": key.status === 1 ? \"active\" : \"inactive\",\n      \"remain_quota_usd\": key.unlimited_quota ? \"unlimited\" : (key.remain_quota / 500000).toFixed(2),\n      \"used_quota_usd\": (key.used_quota / 500000).toFixed(2),\n      \"expired_time\": key.expired_time === -1 ? \"never\" : new Date(key.expired_time * 1000).toISOString()\n    }))\n  },\n  \"available_models\": {\n    \"total_count\": $node[\"List YEScale Models\"].json.data.length,\n    \"active_models\": $node[\"List YEScale Models\"].json.data.filter(model => model.uptime === 1 && model.is_deprecation === 0).length,\n    \"by_category\": $node[\"List YEScale Models\"].json.data.reduce((acc, model) => {\n      const category = model.category || \"Other\";\n      if (!acc[category]) acc[category] = [];\n      acc[category].push({\n        \"model_name\": model.model_name,\n        \"provider\": model.provider_name,\n        \"price_per_request\": model.price_per_request,\n        \"endpoint\": model.endpoint,\n        \"status\": model.uptime === 1 ? (model.is_deprecation === 0 ? \"active\" : \"deprecated\") : \"maintenance\",\n        \"docs\": model.docs\n      });\n      return acc;\n    }, {})\n  }\n} }}"
+      },
+      "id": "7g8h9i0j-1k2l-3m4n-5o6p-q7r8s9t0u1v2",
+      "name": "Success Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1560,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={{ {\n  \"status\": \"error\",\n  \"timestamp\": new Date().toISOString(),\n  \"error_message\": \"Failed to retrieve YEScale account information\",\n  \"troubleshooting\": {\n    \"check_access_key\": \"Verify your YEScale Access Key is correct\",\n    \"check_credentials\": \"Ensure n8n credentials are properly configured\",\n    \"check_network\": \"Verify network connectivity to yescale.bogia.app\",\n    \"documentation\": \"https://im06lq19wz.apifox.cn/doc-7023075\"\n  }\n} }}"
+      },
+      "id": "8h9i0j1k-2l3m-4n5o-6p7q-r8s9t0u1v2w3",
+      "name": "Error Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1560,
+        400
+      ]
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Get YEScale User Info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get YEScale User Info": {
+      "main": [
+        [
+          {
+            "node": "List YEScale API Keys",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List YEScale API Keys": {
+      "main": [
+        [
+          {
+            "node": "List YEScale Models",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List YEScale Models": {
+      "main": [
+        [
+          {
+            "node": "Format Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Results": {
+      "main": [
+        [
+          {
+            "node": "Check API Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check API Success": {
+      "main": [
+        [
+          {
+            "node": "Success Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2025-08-02T07:30:00.000Z",
+      "updatedAt": "2025-08-02T07:30:00.000Z",
+      "id": "yescale-api-test",
+      "name": "YEScale API Test"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-08-02T07:30:00.000Z",
+  "versionId": "1"
+}
