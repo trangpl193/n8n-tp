@@ -1,0 +1,339 @@
+{
+  "meta": {
+    "instanceId": "strangematic-n8n-production"
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "id": "telegram-webhook-trigger-v2",
+      "name": "Telegram Bot Webhook",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        240,
+        400
+      ],
+      "webhookId": "telegram-yescale-bot-v2",
+      "credentials": {
+        "telegramApi": {
+          "id": "telegram-bot-credentials",
+          "name": "Telegram Bot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "user_message",
+              "value": "={{ $json.message.text.toLowerCase().trim() }}"
+            },
+            {
+              "name": "chat_id",
+              "value": "={{ $json.message.chat.id }}"
+            },
+            {
+              "name": "user_name",
+              "value": "={{ $json.message.from.first_name || 'User' }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "extract-message-data",
+      "name": "Extract Message Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        460,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "condition-api-request",
+              "leftValue": "={{ $json.user_message }}",
+              "rightValue": "(api|key)(?!.*model)|danh sách.*api|list.*api|available.*api|show.*api|xem.*api|api.*nào|có.*api.*gì",
+              "operator": {
+                "type": "string",
+                "operation": "regex"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "detect-api-request",
+      "name": "Detect API Request",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        680,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "condition-model-request",
+              "leftValue": "={{ $json.user_message }}",
+              "rightValue": "model|danh sách.*model|list.*model|available.*model|show.*model|xem.*model|model.*nào|có.*model.*gì|ai.*model",
+              "operator": {
+                "type": "string",
+                "operation": "regex"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "detect-model-request",
+      "name": "Detect Model Request",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        680,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://yescale.bogia.app/yescale/apikeylist",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "get-api-keys",
+      "name": "Get API Keys",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        900,
+        200
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "yescale-auth-header",
+          "name": "YEScale Auth Header"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://yescale.bogia.app/yescale/models",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "get-models",
+      "name": "Get Models",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        900,
+        400
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "yescale-auth-header",
+          "name": "YEScale Auth Header"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $node['Extract Message Data'].json.chat_id }}",
+        "text": "={{ '🔑 **API Keys có sẵn:**\\n\\n' + $json.data.slice(0, 5).map((key, index) => (index + 1) + '. **' + key.name + '**\\n   • ' + (key.status === 1 ? '✅ Hoạt động' : '❌ Không hoạt động') + '\\n   • Quota: ' + (key.unlimited_quota ? '♾️ Không giới hạn' : '$' + (key.remain_quota / 500000).toFixed(2)) + '\\n').join('\\n') + '\\n📊 **Tổng:** ' + $json.data.length + ' API keys (' + $json.data.filter(key => key.status === 1).length + ' hoạt động)' }}",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "id": "send-api-response",
+      "name": "Send API Response",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1120,
+        200
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "telegram-bot-credentials",
+          "name": "Telegram Bot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $node['Extract Message Data'].json.chat_id }}",
+        "text": "={{ '🤖 **Models có sẵn:**\\n\\n' + Object.entries($json.data.filter(model => model.uptime === 1 && model.is_deprecation === 0).reduce((acc, model) => { const category = model.category || 'Khác'; if (!acc[category]) acc[category] = []; acc[category].push({ name: model.model_name, provider: model.provider_name }); return acc; }, {})).slice(0, 5).map(([category, models]) => '**📂 ' + category + ':**\\n' + models.slice(0, 3).map((model, index) => '   ' + (index + 1) + '. `' + model.name + '` (' + model.provider + ')').join('\\n')).join('\\n\\n') + '\\n\\n📊 **Tổng:** ' + $json.data.filter(model => model.uptime === 1 && model.is_deprecation === 0).length + ' models hoạt động' }}",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "id": "send-model-response",
+      "name": "Send Model Response",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1120,
+        400
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "telegram-bot-credentials",
+          "name": "Telegram Bot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $node['Extract Message Data'].json.chat_id }}",
+        "text": "={{ '👋 **Xin chào ' + $node['Extract Message Data'].json.user_name + '!**\\n\\n🤖 **YEScale Bot - Trợ lý API thông minh**\\n\\n📖 **Hướng dẫn:**\\n• `api` - Xem API keys\\n• `models` - Xem models\\n• `help` - Hướng dẫn\\n\\n💡 Bot hiểu cả tiếng Việt và tiếng Anh!' }}",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "id": "send-help-response",
+      "name": "Send Help Response",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        900,
+        600
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "telegram-bot-credentials",
+          "name": "Telegram Bot API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Telegram Bot Webhook": {
+      "main": [
+        [
+          {
+            "node": "Extract Message Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Message Data": {
+      "main": [
+        [
+          {
+            "node": "Detect API Request",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Detect Model Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Detect API Request": {
+      "main": [
+        [
+          {
+            "node": "Get API Keys",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Detect Model Request": {
+      "main": [
+        [
+          {
+            "node": "Get Models",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Help Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get API Keys": {
+      "main": [
+        [
+          {
+            "node": "Send API Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Models": {
+      "main": [
+        [
+          {
+            "node": "Send Model Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2025-08-02T08:30:00.000Z",
+      "updatedAt": "2025-08-02T08:30:00.000Z",
+      "id": "telegram-yescale-bot-clean",
+      "name": "Telegram YEScale Bot Clean"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-08-02T08:30:00.000Z",
+  "versionId": "3"
+}
